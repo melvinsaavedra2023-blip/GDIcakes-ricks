@@ -12,7 +12,7 @@ async function cargarPedidos() {
 
         const respuesta = await fetch(
 
-            `http://localhost:3000/api/mis-pedidos/${usuario.correo}`
+            `https://gdicakes-ricks.onrender.com/api/mis-pedidos/${usuario.correo}`
 
         );
 
