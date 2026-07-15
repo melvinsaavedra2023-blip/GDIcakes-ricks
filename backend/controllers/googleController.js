@@ -1,5 +1,4 @@
 const { OAuth2Client } = require("google-auth-library");
-const sql = require("mssql");
 const { getConnection } = require("../config/db");
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -13,10 +12,8 @@ const loginGoogle = async (req, res) => {
         if (!token) {
 
             return res.status(400).json({
-
                 success: false,
                 mensaje: "Token no recibido."
-
             });
 
         }
@@ -40,94 +37,94 @@ const loginGoogle = async (req, res) => {
         // BUSCAR USUARIO
         //=========================
 
-        const usuario = await conexion.request()
+        const usuario = await conexion.query(
 
-            .input("correo", sql.VarChar, correo)
+            `
+            SELECT *
+            FROM usuarios
+            WHERE correo = $1
+            `,
 
-            .query(`
+            [correo]
 
-                SELECT *
-
-                FROM Usuarios
-
-                WHERE correo=@correo
-
-            `);
+        );
 
         //=========================
         // SI NO EXISTE
         //=========================
 
-        if (usuario.recordset.length === 0) {
+        if (usuario.rows.length === 0) {
 
             const usuarioGenerado = correo.split("@")[0];
 
-            await conexion.request()
+            await conexion.query(
 
-                .input("nombre", sql.VarChar, nombre)
-                .input("apellido", sql.VarChar, apellido)
-                .input("correo", sql.VarChar, correo)
-                .input("usuario", sql.VarChar, usuarioGenerado)
+                `
+                INSERT INTO usuarios
+                (
+                    nombre,
+                    apellido,
+                    correo,
+                    usuario,
+                    contrasena,
+                    rol,
+                    estado,
+                    login_google
+                )
+                VALUES
+                (
+                    $1,
+                    $2,
+                    $3,
+                    $4,
+                    NULL,
+                    'Cliente',
+                    true,
+                    true
+                )
+                `,
 
-                .query(`
+                [
+                    nombre,
+                    apellido,
+                    correo,
+                    usuarioGenerado
+                ]
 
-                    INSERT INTO Usuarios
-                    (
-                        nombre,
-                        apellido,
-                        correo,
-                        usuario,
-                        contrasena,
-                        rol,
-                        estado,
-                        login_google
-                    )
+            );
 
-                    VALUES
-                    (
-                        @nombre,
-                        @apellido,
-                        @correo,
-                        @usuario,
-                        NULL,
-                        'Cliente',
-                        1,
-                        1
-                    )
+            await conexion.query(
 
-                `);
+                `
+                INSERT INTO clientes
+                (
+                    nombre,
+                    apellido,
+                    telefono,
+                    correo,
+                    direccion,
+                    fecha_registro,
+                    estado
+                )
+                VALUES
+                (
+                    $1,
+                    $2,
+                    '',
+                    $3,
+                    '',
+                    CURRENT_DATE,
+                    true
+                )
+                `,
 
-            await conexion.request()
+                [
+                    nombre,
+                    apellido,
+                    correo
+                ]
 
-                .input("nombre", sql.VarChar, nombre)
-                .input("apellido", sql.VarChar, apellido)
-                .input("correo", sql.VarChar, correo)
-
-                .query(`
-
-                    INSERT INTO Clientes
-                    (
-                        nombre,
-                        apellido,
-                        telefono,
-                        correo,
-                        direccion,
-                        fecha_registro,
-                        estado
-                    )
-
-                    VALUES
-                    (
-                        @nombre,
-                        @apellido,
-                        '',
-                        @correo,
-                        '',
-                        GETDATE(),
-                        1
-                    )
-
-                `);
+            );
 
         }
 
@@ -135,32 +132,29 @@ const loginGoogle = async (req, res) => {
         // DEVOLVER USUARIO
         //=========================
 
-        const resultado = await conexion.request()
+        const resultado = await conexion.query(
 
-            .input("correo", sql.VarChar, correo)
+            `
+            SELECT
+                id_usuario,
+                nombre,
+                apellido,
+                correo,
+                usuario,
+                rol,
+                login_google
+            FROM usuarios
+            WHERE correo = $1
+            `,
 
-            .query(`
+            [correo]
 
-                SELECT
-
-                    id_usuario,
-                    nombre,
-                    apellido,
-                    correo,
-                    usuario,
-                    rol,
-                    login_google
-
-                FROM Usuarios
-
-                WHERE correo=@correo
-
-            `);
+        );
 
         res.json({
 
             success: true,
-            usuario: resultado.recordset[0]
+            usuario: resultado.rows[0]
 
         });
 
@@ -180,7 +174,5 @@ const loginGoogle = async (req, res) => {
 };
 
 module.exports = {
-
     loginGoogle
-
 };

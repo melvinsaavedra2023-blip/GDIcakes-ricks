@@ -31,11 +31,11 @@
 
             <a href="index.html" class="volver">
 
-    <i class="ri-arrow-left-line"></i>
+                <i class="ri-arrow-left-line"></i>
 
-    Seguir comprando
+                Seguir comprando
 
-</a>
+            </a>
 
             <h1>Finalizar compra</h1>
 
@@ -52,11 +52,11 @@
                     <label>Nombre completo</label>
 
                     <input
-type="text"
-id="nombre"
-placeholder="Ingrese su nombre completo"
-autocomplete="name"
-required>
+                        type="text"
+                        id="nombre"
+                        placeholder="Ingrese su nombre completo"
+                        autocomplete="name"
+                        required>
 
                 </div>
 
@@ -65,11 +65,11 @@ required>
                     <label>Teléfono</label>
 
                     <input
-type="text"
-id="telefono"
-placeholder="Ingrese su teléfono"
-autocomplete="tel"
-required>
+                        type="text"
+                        id="telefono"
+                        placeholder="Ingrese su teléfono"
+                        autocomplete="tel"
+                        required>
 
                 </div>
 
@@ -78,11 +78,11 @@ required>
                     <label>Dirección de entrega</label>
 
                     <input
-type="text"
-id="telefono"
-placeholder="Ingrese su teléfono"
-autocomplete="tel"
-required>
+                        type="text"
+                        id="direccion"
+                        placeholder="Ingrese su dirección"
+                        autocomplete="street-address"
+                        required>
 
                 </div>
 
@@ -90,18 +90,20 @@ required>
 
                     <label>Método de pago</label>
 
-                    <select id="metodoPago">
+                    <select id="metodoPago" required>
 
-                        <option>Yape</option>
-                        <option>Plin</option>
-                        <option>BCP</option>
-                        <option>Efectivo</option>
+                        <option value="Yape">Yape</option>
+                        <option value="Plin">Plin</option>
+                        <option value="BCP">BCP</option>
+                        <option value="Efectivo">Efectivo</option>
 
                     </select>
 
                 </div>
 
-                <button type="submit" class="btn-confirmar">
+                <button
+                    type="submit"
+                    class="btn-confirmar">
 
                     Confirmar compra
 
@@ -119,19 +121,15 @@ required>
 
             <h2>
 
-<i class="ri-shopping-bag-3-line"></i>
+                <i class="ri-shopping-bag-3-line"></i>
 
-Resumen de compra
+                Resumen de compra
 
-</h2>
+            </h2>
 
-            <div id="resumenPedido">
+            <div id="resumenPedido"></div>
 
-            </div>
-
-            <div id="totalPedido">
-
-            </div>
+            <div id="totalPedido"></div>
 
         </div>
 

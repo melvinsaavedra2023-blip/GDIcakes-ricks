@@ -1,33 +1,28 @@
-const sql = require("mssql");
+const { Pool } = require("pg");
 require("dotenv").config();
 
-const config = {
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    server: process.env.DB_SERVER,
-    database: process.env.DB_DATABASE,
-    port: parseInt(process.env.DB_PORT),
-    options: {
-        encrypt: true,
-        trustServerCertificate: true
-    },
-    connectionTimeout: 5000,
-    requestTimeout: 5000
-};
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
+
+pool.on("error", (err) => {
+    console.error("❌ PostgreSQL:", err);
+});
 
 async function getConnection() {
-    try {
-        const pool = await sql.connect(config);
-        console.log("✅ Conectado correctamente a SQL Server");
-        return pool;
-    } catch (error) {
-        console.error("❌ Error al conectar con SQL Server:");
-        console.error(error.message);
-        throw error;
-    }
+    const client = await pool.connect();
+
+    console.log("✅ Conexión obtenida");
+
+    client.release();
+
+    return pool;
 }
 
 module.exports = {
     getConnection,
-    sql
+    pool
 };

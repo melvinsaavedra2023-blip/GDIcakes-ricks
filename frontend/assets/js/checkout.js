@@ -27,9 +27,9 @@ if (resumen) {
         <div class="producto-resumen">
 
             <img
-    src="http://localhost:3000/uploads/${producto.imagen}"
-    alt="${producto.nombre}"
-    onerror="this.src='assets/images/cake.png'">
+                src="http://localhost:3000/uploads/${producto.imagen}"
+                alt="${producto.nombre}"
+                onerror="this.src='assets/images/cake.png'">
 
             <div class="producto-info">
 
@@ -65,11 +65,19 @@ if (resumen) {
 // REGISTRAR PEDIDO
 // ============================
 
+if (formulario) {
+
 formulario.addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
+    console.log("🚀 Submit ejecutado");
+
     const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+    console.log("Usuario:", usuario);
+
+    console.log("Carrito:", carrito);
 
     if (!usuario) {
 
@@ -91,6 +99,8 @@ formulario.addEventListener("submit", async (e) => {
 
     try {
 
+        console.log("🚀 Enviando pedido...");
+
         const respuesta = await fetch("http://localhost:3000/api/pedidos", {
 
             method: "POST",
@@ -101,26 +111,29 @@ formulario.addEventListener("submit", async (e) => {
 
             },
 
-           body: JSON.stringify({
+            body: JSON.stringify({
 
-    correo: usuario.correo,
+                correo: usuario.correo,
+                telefono: document.getElementById("telefono").value,
+                direccion: document.getElementById("direccion").value,
+                carrito: carrito,
+                metodo_pago: metodo_pago
 
-    telefono: document.getElementById("telefono").value,
+            })
 
-    direccion: document.getElementById("direccion").value,
-
-    carrito,
-
-    metodo_pago
-
-})
         });
 
+        console.log("Status:", respuesta.status);
+
         const datos = await respuesta.json();
+
+        console.log("Respuesta:", datos);
 
         if (datos.success) {
 
             localStorage.removeItem("carrito");
+
+            alert("Pedido registrado correctamente.");
 
             window.location.href = "index.html";
 
@@ -132,10 +145,12 @@ formulario.addEventListener("submit", async (e) => {
 
     } catch (error) {
 
-        console.error(error);
+        console.error("ERROR FETCH:", error);
 
         alert("Error al registrar el pedido.");
 
     }
 
 });
+
+}

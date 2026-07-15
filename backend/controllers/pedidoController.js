@@ -1,4 +1,4 @@
-const sql = require("mssql");
+
 const { getConnection } = require("../config/db");
 
 //=========================
@@ -10,51 +10,37 @@ const registrarPedido = async (req, res) => {
     try {
 
         const {
-
-    correo,
-    telefono,
-    direccion,
-    carrito,
-    metodo_pago
-
-} = req.body;
+            correo,
+            telefono,
+            direccion,
+            carrito,
+            metodo_pago
+        } = req.body;
 
         const conexion = await getConnection();
 
-//=========================
-// ACTUALIZAR DATOS DEL CLIENTE
-//=========================
+        // Actualizar datos del cliente
+        await conexion.query(
+            `
+            UPDATE clientes
+            SET telefono=$1,
+                direccion=$2
+            WHERE correo=$3
+            `,
+            [telefono, direccion, correo]
+        );
 
-await conexion.request()
+        // Buscar cliente
+        const cliente = await conexion.query(
+            `
+            SELECT id_cliente
+            FROM clientes
+            WHERE correo=$1
+            `,
+            [correo]
+        );
 
-    .input("correo", sql.VarChar, correo)
-    .input("telefono", sql.VarChar, telefono)
-    .input("direccion", sql.VarChar, direccion)
-
-    .query(`
-
-        UPDATE Clientes
-
-        SET
-
-            telefono = @telefono,
-            direccion = @direccion
-
-        WHERE correo = @correo
-
-    `);
-
-        const cliente = await conexion.request()
-
-            .input("correo", sql.VarChar, correo)
-
-            .query(`
-                SELECT id_cliente
-                FROM Clientes
-                WHERE correo=@correo
-            `);
-
-        if (cliente.recordset.length === 0) {
+        if (cliente.rows.length === 0) {
 
             return res.status(404).json({
 
@@ -65,7 +51,7 @@ await conexion.request()
 
         }
 
-        const id_cliente = cliente.recordset[0].id_cliente;
+        const id_cliente = cliente.rows[0].id_cliente;
 
         let total = 0;
 
@@ -75,76 +61,81 @@ await conexion.request()
 
         });
 
-        const pedido = await conexion.request()
+        // Registrar pedido
+        const pedido = await conexion.query(
 
-            .input("id_cliente",sql.Int,id_cliente)
-            .input("total",sql.Decimal(10,2),total)
-            .input("estado",sql.VarChar,"Pendiente")
-            .input("metodo_pago",sql.VarChar,metodo_pago)
+            `
+            INSERT INTO pedidos
+            (
+                id_cliente,
+                total,
+                estado,
+                metodo_pago
+            )
+            VALUES
+            (
+                $1,
+                $2,
+                $3,
+                $4
+            )
+            RETURNING id_pedido
+            `,
 
-            .query(`
+            [
+                id_cliente,
+                total,
+                "Pendiente",
+                metodo_pago
+            ]
 
-                INSERT INTO Pedidos
+        );
+
+        const idPedido = pedido.rows[0].id_pedido;
+
+        for(const producto of carrito){
+
+            await conexion.query(
+
+                `
+                INSERT INTO detallepedido
                 (
-                    id_cliente,
-                    total,
-                    estado,
-                    metodo_pago
+                    id_pedido,
+                    id_producto,
+                    cantidad,
+                    precio,
+                    subtotal
                 )
-
-                OUTPUT INSERTED.id_pedido
-
                 VALUES
                 (
-                    @id_cliente,
-                    @total,
-                    @estado,
-                    @metodo_pago
+                    $1,$2,$3,$4,$5
                 )
+                `,
 
-            `);
+                [
+                    idPedido,
+                    producto.id_producto,
+                    producto.cantidad,
+                    producto.precio,
+                    producto.precio * producto.cantidad
+                ]
 
-        const idPedido = pedido.recordset[0].id_pedido;
+            );
 
-        for (const producto of carrito) {
+            await conexion.query(
 
-            await conexion.request()
+                `
+                UPDATE productos
+                SET stock = stock - $1
+                WHERE id_producto=$2
+                `,
 
-                .input("id_pedido", sql.Int, idPedido)
-                .input("id_producto", sql.Int, producto.id_producto)
-                .input("cantidad", sql.Int, producto.cantidad)
-                .input("precio", sql.Decimal(10,2), producto.precio)
-                .input("subtotal", sql.Decimal(10,2), producto.precio * producto.cantidad)
+                [
+                    producto.cantidad,
+                    producto.id_producto
+                ]
 
-                .query(`
-                    INSERT INTO DetallePedido
-                    (
-                        id_pedido,
-                        id_producto,
-                        cantidad,
-                        precio,
-                        subtotal
-                    )
-                    VALUES
-                    (
-                        @id_pedido,
-                        @id_producto,
-                        @cantidad,
-                        @precio,
-                        @subtotal
-                    )
-                `);
-
-            await conexion.request()
-
-                .input("cantidad", sql.Int, producto.cantidad)
-                .input("id_producto", sql.Int, producto.id_producto)
-
-                .query(`
-                    UPDATE Productos
-                    SET stock = stock - @cantidad
-                    WHERE id_producto = @id_producto
-                `);
+            );
 
         }
 
@@ -157,64 +148,64 @@ await conexion.request()
 
     } catch (error) {
 
-        console.log(error);
+    console.error("========== ERROR PEDIDO ==========");
+    console.error(error);
+    console.error(error.message);
+    console.error(error.stack);
 
-        res.status(500).json({
+    return res.status(500).json({
 
-            success:false,
-            mensaje:"Error interno."
+        success: false,
+        mensaje: error.message
 
-        });
+    });
 
-    }
-
+}
 };
-
 //=========================
 // DETALLE DEL PEDIDO
 //=========================
 
-const obtenerDetallePedido = async (req,res)=>{
+const obtenerDetallePedido = async (req, res) => {
 
-    try{
+    try {
 
         const { id } = req.params;
 
         const conexion = await getConnection();
 
-        const resultado = await conexion.request()
+        const resultado = await conexion.query(
 
-        .input("id",sql.Int,id)
+            `
+            SELECT
 
-        .query(`
+                p.nombre,
+                p.imagen,
+                d.cantidad,
+                d.precio,
+                d.subtotal
 
-        SELECT
+            FROM detallepedido d
 
-        p.nombre,
-        p.imagen,
-        d.cantidad,
-        d.precio,
-        d.subtotal
+            INNER JOIN productos p
+            ON d.id_producto = p.id_producto
 
-        FROM DetallePedido d
+            WHERE d.id_pedido = $1
+            `,
 
-        INNER JOIN Productos p
+            [id]
 
-        ON d.id_producto=p.id_producto
+        );
 
-        WHERE d.id_pedido=@id
+        res.json(resultado.rows);
 
-        `);
-
-        res.json(resultado.recordset);
-
-    }catch(error){
+    } catch (error) {
 
         console.log(error);
 
         res.status(500).json({
 
-            success:false
+            success: false
 
         });
 
@@ -226,51 +217,49 @@ const obtenerDetallePedido = async (req,res)=>{
 // CAMBIAR ESTADO
 //=========================
 
-const cambiarEstadoPedido = async(req,res)=>{
+const cambiarEstadoPedido = async (req, res) => {
 
-    try{
+    try {
 
         const { id } = req.params;
-
         const { estado } = req.body;
 
         const conexion = await getConnection();
 
-        await conexion.request()
+        await conexion.query(
 
-        .input("id",sql.Int,id)
-        .input("estado",sql.VarChar,estado)
+            `
+            UPDATE pedidos
+            SET estado = $1
+            WHERE id_pedido = $2
+            `,
 
-        .query(`
+            [
+                estado,
+                id
+            ]
 
-        UPDATE Pedidos
-
-        SET estado=@estado
-
-        WHERE id_pedido=@id
-
-        `);
+        );
 
         res.json({
 
-            success:true
+            success: true
 
         });
 
-    }catch(error){
+    } catch (error) {
 
         console.log(error);
 
         res.status(500).json({
 
-            success:false
+            success: false
 
         });
 
     }
 
 };
-
 //=========================
 // MIS PEDIDOS
 //=========================
@@ -283,37 +272,37 @@ const obtenerMisPedidos = async (req, res) => {
 
         const conexion = await getConnection();
 
-        const resultado = await conexion.request()
+        const resultado = await conexion.query(
 
-            .input("correo", sql.VarChar, correo)
+            `
+            SELECT
 
-            .query(`
+                p.id_pedido,
+                p.fecha,
+                p.total,
+                p.estado,
+                p.metodo_pago
 
-                SELECT
+            FROM pedidos p
 
-    p.id_pedido,
-    p.fecha,
-    p.total,
-    p.estado,
-    p.metodo_pago
+            INNER JOIN clientes c
 
-FROM Pedidos p
+            ON p.id_cliente = c.id_cliente
 
-                INNER JOIN Clientes c
+            WHERE c.correo = $1
 
-                ON p.id_cliente = c.id_cliente
+            ORDER BY p.fecha DESC
+            `,
 
-                WHERE c.correo = @correo
+            [correo]
 
-                ORDER BY p.fecha DESC
-
-            `);
+        );
 
         res.json({
 
             success: true,
 
-            pedidos: resultado.recordset
+            pedidos: resultado.rows
 
         });
 
@@ -332,7 +321,6 @@ FROM Pedidos p
     }
 
 };
-
 //=========================
 // INFORMACIÓN DEL PEDIDO
 //=========================
@@ -345,39 +333,39 @@ const obtenerInfoPedido = async (req, res) => {
 
         const conexion = await getConnection();
 
-        const resultado = await conexion.request()
+        const resultado = await conexion.query(
 
-            .input("id", sql.Int, id)
+            `
+            SELECT
 
-            .query(`
+                p.id_pedido,
+                p.fecha,
+                p.total,
+                p.estado,
+                p.metodo_pago,
+                c.nombre,
+                c.apellido,
+                c.telefono,
+                c.direccion
 
-                SELECT
+            FROM pedidos p
 
-                    p.id_pedido,
-                    p.fecha,
-                    p.total,
-                    p.estado,
-                    p.metodo_pago,
-                    c.nombre,
-                    c.apellido,
-                    c.telefono,
-                    c.direccion
+            INNER JOIN clientes c
 
-                FROM Pedidos p
+            ON p.id_cliente = c.id_cliente
 
-                INNER JOIN Clientes c
+            WHERE p.id_pedido = $1
+            `,
 
-                ON p.id_cliente = c.id_cliente
+            [id]
 
-                WHERE p.id_pedido=@id
+        );
 
-            `);
-
-        if (resultado.recordset.length === 0) {
+        if (resultado.rows.length === 0) {
 
             return res.status(404).json({
 
-                success:false
+                success: false
 
             });
 
@@ -385,9 +373,9 @@ const obtenerInfoPedido = async (req, res) => {
 
         res.json({
 
-            success:true,
+            success: true,
 
-            pedido:resultado.recordset[0]
+            pedido: resultado.rows[0]
 
         });
 
@@ -397,14 +385,13 @@ const obtenerInfoPedido = async (req, res) => {
 
         res.status(500).json({
 
-            success:false
+            success: false
 
         });
 
     }
 
 };
-
 module.exports = {
 
     registrarPedido,

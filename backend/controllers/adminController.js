@@ -8,46 +8,47 @@ const dashboard = async (req, res) => {
 
     try {
 
-        const conexion = await getConnection();
+        const db = await getConnection();
 
-        const ventas = await conexion.request().query(`
-            SELECT ISNULL(SUM(total),0) AS total
-            FROM Pedidos
+        const ventas = await db.query(`
+            SELECT COALESCE(SUM(total),0) AS total
+            FROM pedidos
         `);
 
-        const pedidos = await conexion.request().query(`
-    SELECT COUNT(*) AS total
-    FROM Pedidos
-    WHERE estado='Pendiente'
-`);
-
-        const clientes = await conexion.request().query(`
-    SELECT COUNT(*) AS total
-    FROM Usuarios
-    WHERE rol='Cliente'
-`);
-
-        const productos = await conexion.request().query(`
+        const pedidos = await db.query(`
             SELECT COUNT(*) AS total
-            FROM Productos
+            FROM pedidos
+            WHERE estado = 'Pendiente'
+        `);
+
+        const clientes = await db.query(`
+            SELECT COUNT(*) AS total
+            FROM usuarios
+            WHERE rol = 'Cliente'
+        `);
+
+        const productos = await db.query(`
+            SELECT COUNT(*) AS total
+            FROM productos
         `);
 
         res.json({
 
-            ventas: ventas.recordset[0].total,
-            pedidos: pedidos.recordset[0].total,
-            clientes: clientes.recordset[0].total,
-            productos: productos.recordset[0].total
+            ventas: Number(ventas.rows[0].total),
+            pedidos: Number(pedidos.rows[0].total),
+            clientes: Number(clientes.rows[0].total),
+            productos: Number(productos.rows[0].total)
 
         });
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
 
-            mensaje: "Error al cargar dashboard"
+            success: false,
+            mensaje: error.message
 
         });
 
@@ -63,9 +64,9 @@ const obtenerClientes = async (req, res) => {
 
     try {
 
-        const conexion = await getConnection();
+        const db = await getConnection();
 
-        const resultado = await conexion.request().query(`
+        const resultado = await db.query(`
 
             SELECT
 
@@ -76,21 +77,22 @@ const obtenerClientes = async (req, res) => {
                 telefono,
                 fecha_registro
 
-            FROM Clientes
+            FROM clientes
 
             ORDER BY id_cliente DESC
 
         `);
 
-        res.json(resultado.recordset);
+        res.json(resultado.rows);
 
     } catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         res.status(500).json({
 
-            mensaje: "Error al obtener clientes"
+            success: false,
+            mensaje: error.message
 
         });
 

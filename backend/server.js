@@ -1,5 +1,5 @@
-
 require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -17,26 +17,35 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-// ==========================
-// SERVIR FRONTEND
-// ==========================
-app.use(express.static(path.join(__dirname, "../frontend")));
 
 // ==========================
-// CONEXIÓN SQL SERVER
+// CONEXIÓN POSTGRESQL
 // ==========================
 getConnection()
-.then(() => {
+    const { pool } = require("./config/db");
 
-    console.log("✅ Conectado correctamente a SQL Server");
-
+pool.query("SELECT NOW()")
+.then((r) => {
+    console.log("✅ PostgreSQL responde:", r.rows[0]);
 })
-.catch((err) => {
+.catch((e) => {
+    console.error("❌ PostgreSQL:", e);
+});
 
-    console.error(err);
+// ==========================
+// RUTA PRINCIPAL (LOGIN)
+// ==========================
+app.get("/", (req, res) => {
+
+    res.sendFile(path.join(__dirname, "../frontend/login.html"));
 
 });
+
+// ==========================
+// ARCHIVOS ESTÁTICOS
+// ==========================
+app.use(express.static(path.join(__dirname, "../frontend")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // ==========================
 // API
@@ -47,15 +56,6 @@ app.use("/api", pedidoRoutes);
 app.use("/api", adminRoutes);
 app.use("/api", googleRoutes);
 app.use("/api", perfilRoutes);
-
-// ==========================
-// ABRIR INDEX
-// ==========================
-app.get("/", (req, res) => {
-
-    res.sendFile(path.join(__dirname, "../frontend/index.html"));
-
-});
 
 // ==========================
 // SERVIDOR

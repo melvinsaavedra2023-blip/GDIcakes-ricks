@@ -1,8 +1,8 @@
 const { getConnection } = require("../config/db");
 
-// =========================
+// =======================
 // LOGIN
-// =========================
+// =======================
 const login = async (req, res) => {
 
     try {
@@ -16,30 +16,36 @@ const login = async (req, res) => {
             });
         }
 
-        const conexion = await getConnection();
+        const db = await getConnection();
 
-        const resultado = await conexion.request()
-            .input("usuario", usuario)
-            .input("password", password)
-            .query(`
-                SELECT
-                    id_usuario,
-                    nombre,
-                    apellido,
-                    correo,
-                    usuario,
-                    rol
-                FROM Usuarios
-                WHERE usuario=@usuario
-                AND contrasena=@password
-            `);
+        console.log("========== LOGIN ==========");
+        console.log("Usuario:", usuario);
+        console.log("Password:", password);
 
-        if (resultado.recordset.length > 0) {
+        const resultado = await db.query(
+            `
+            SELECT
+                id_usuario,
+                nombre,
+                apellido,
+                correo,
+                usuario,
+                rol
+            FROM usuarios
+            WHERE usuario = $1
+            AND contrasena = $2
+            `,
+            [usuario, password]
+        );
+
+        console.log("Resultado:", resultado.rows);
+
+        if (resultado.rows.length > 0) {
 
             return res.json({
                 success: true,
                 mensaje: "Bienvenido",
-                usuario: resultado.recordset[0]
+                usuario: resultado.rows[0]
             });
 
         }
@@ -51,20 +57,23 @@ const login = async (req, res) => {
 
     } catch (error) {
 
+        console.error("========== ERROR LOGIN ==========");
         console.error(error);
+        console.error(error.message);
+        console.error(error.stack);
 
         return res.status(500).json({
             success: false,
-            mensaje: "Error interno del servidor"
+            mensaje: error.message
         });
 
     }
 
 };
 
-// =========================
+// =======================
 // REGISTRO
-// =========================
+// =======================
 const registrar = async (req, res) => {
 
     try {
@@ -77,18 +86,18 @@ const registrar = async (req, res) => {
             password
         } = req.body;
 
-        const conexion = await getConnection();
+        const db = await getConnection();
 
-        // Verificar usuario existente
-        const existe = await conexion.request()
-            .input("usuario", usuario)
-            .query(`
-                SELECT *
-                FROM Usuarios
-                WHERE usuario=@usuario
-            `);
+        const existe = await db.query(
+            `
+            SELECT *
+            FROM usuarios
+            WHERE usuario = $1
+            `,
+            [usuario]
+        );
 
-        if (existe.recordset.length > 0) {
+        if (existe.rows.length > 0) {
 
             return res.status(400).json({
                 success: false,
@@ -97,80 +106,81 @@ const registrar = async (req, res) => {
 
         }
 
-        // Registrar usuario
-        await conexion.request()
-            .input("nombre", nombre)
-            .input("apellido", apellido)
-            .input("correo", correo)
-            .input("usuario", usuario)
-            .input("password", password)
-            .query(`
-                INSERT INTO Usuarios
-                (
-                    nombre,
-                    apellido,
-                    correo,
-                    usuario,
-                    contrasena,
-                    rol,
-                    estado
-                )
-                VALUES
-                (
-                    @nombre,
-                    @apellido,
-                    @correo,
-                    @usuario,
-                    @password,
-                    'Cliente',
-                    1
-                )
-            `);
+        await db.query(
+            `
+            INSERT INTO usuarios
+            (
+                nombre,
+                apellido,
+                correo,
+                usuario,
+                contrasena,
+                rol,
+                estado
+            )
+            VALUES
+            (
+                $1,
+                $2,
+                $3,
+                $4,
+                $5,
+                'Cliente',
+                true
+            )
+            `,
+            [
+                nombre,
+                apellido,
+                correo,
+                usuario,
+                password
+            ]
+        );
 
-        // Registrar cliente automáticamente
-        await conexion.request()
-            .input("nombre", nombre)
-            .input("apellido", apellido)
-            .input("correo", correo)
-            .query(`
-                INSERT INTO Clientes
-                (
-                    nombre,
-                    apellido,
-                    telefono,
-                    correo,
-                    direccion,
-                    fecha_registro,
-                    estado
-                )
-                VALUES
-                (
-                    @nombre,
-                    @apellido,
-                    '',
-                    @correo,
-                    '',
-                    GETDATE(),
-                    1
-                )
-            `);
+        await db.query(
+            `
+            INSERT INTO clientes
+            (
+                nombre,
+                apellido,
+                telefono,
+                correo,
+                direccion,
+                fecha_registro,
+                estado
+            )
+            VALUES
+            (
+                $1,
+                $2,
+                '',
+                $3,
+                '',
+                CURRENT_DATE,
+                true
+            )
+            `,
+            [
+                nombre,
+                apellido,
+                correo
+            ]
+        );
 
-        return res.json({
-
+        res.json({
             success: true,
             mensaje: "Usuario registrado correctamente."
-
         });
 
     } catch (error) {
 
+        console.error("========== ERROR REGISTRO ==========");
         console.error(error);
 
-        return res.status(500).json({
-
+        res.status(500).json({
             success: false,
-            mensaje: "Error interno del servidor."
-
+            mensaje: error.message
         });
 
     }

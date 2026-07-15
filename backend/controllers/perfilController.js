@@ -1,4 +1,3 @@
-const sql = require("mssql");
 const { getConnection } = require("../config/db");
 
 // ==========================
@@ -12,29 +11,26 @@ const obtenerPerfil = async (req, res) => {
 
         const conexion = await getConnection();
 
-        const resultado = await conexion.request()
+        const resultado = await conexion.query(
 
-            .input("id_usuario", sql.Int, id_usuario)
+            `
+            SELECT
+                id_usuario,
+                nombre,
+                apellido,
+                correo,
+                usuario,
+                contrasena,
+                login_google
+            FROM usuarios
+            WHERE id_usuario = $1
+            `,
 
-            .query(`
+            [id_usuario]
 
-                SELECT
+        );
 
-id_usuario,
-nombre,
-apellido,
-correo,
-usuario,
-contrasena,
-login_google
-
-FROM Usuarios
-
-                WHERE id_usuario = @id_usuario
-
-            `);
-
-        if (resultado.recordset.length === 0) {
+        if (resultado.rows.length === 0) {
 
             return res.status(404).json({
 
@@ -48,7 +44,7 @@ FROM Usuarios
         res.json({
 
             success: true,
-            usuario: resultado.recordset[0]
+            usuario: resultado.rows[0]
 
         });
 
@@ -86,26 +82,25 @@ const actualizarPerfil = async (req, res) => {
 
         const conexion = await getConnection();
 
-        await conexion.request()
+        await conexion.query(
 
-            .input("id_usuario", sql.Int, id_usuario)
-            .input("nombre", sql.VarChar, nombre)
-            .input("apellido", sql.VarChar, apellido)
-            .input("usuario", sql.VarChar, usuario)
+            `
+            UPDATE usuarios
+            SET
+                nombre = $1,
+                apellido = $2,
+                usuario = $3
+            WHERE id_usuario = $4
+            `,
 
-            .query(`
+            [
+                nombre,
+                apellido,
+                usuario,
+                id_usuario
+            ]
 
-                UPDATE Usuarios
-
-                SET
-
-                    nombre=@nombre,
-                    apellido=@apellido,
-                    usuario=@usuario
-
-                WHERE id_usuario=@id_usuario
-
-            `);
+        );
 
         res.json({
 

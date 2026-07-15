@@ -19,13 +19,13 @@ async function cargarDashboard() {
         const datos = await respuestaDashboard.json();
 
         document.getElementById("totalVentas").textContent =
-            "S/. " + Number(datos.ventas).toFixed(2);
+            "S/. " + Number(datos.ventas || 0).toFixed(2);
 
         document.getElementById("totalPedidos").textContent =
-            datos.pedidos;
+            datos.pedidos || 0;
 
         document.getElementById("totalUsuarios").textContent =
-            datos.clientes;
+            datos.clientes || 0;
 
         const respuestaProductos = await fetch(
             "http://localhost:3000/api/productos"
@@ -34,7 +34,7 @@ async function cargarDashboard() {
         const productos = await respuestaProductos.json();
 
         document.getElementById("totalProductos").textContent =
-            productos.length;
+            Array.isArray(productos) ? productos.length : 0;
 
     } catch (error) {
 
@@ -61,6 +61,17 @@ async function mostrarProductos() {
         );
 
         const productos = await respuesta.json();
+
+        if (!Array.isArray(productos)) {
+
+            contenido.innerHTML = `
+                <h2>Error al cargar los productos</h2>
+                <p>${productos.mensaje || "No se pudieron obtener los productos."}</p>
+            `;
+
+            return;
+
+        }
 
         let html = `
 
@@ -170,6 +181,11 @@ async function mostrarProductos() {
 
         console.error(error);
 
+        contenido.innerHTML = `
+            <h2>Error</h2>
+            <p>No se pudieron cargar los productos.</p>
+        `;
+
     }
 
 }
@@ -199,13 +215,13 @@ async function eliminar(id) {
 
             alert("Producto eliminado correctamente.");
 
-            mostrarProductos();
+            await mostrarProductos();
 
-            cargarDashboard();
+            await cargarDashboard();
 
         } else {
 
-            alert("No se pudo eliminar el producto.");
+            alert(datos.mensaje || "No se pudo eliminar el producto.");
 
         }
 
@@ -279,7 +295,7 @@ function nuevoProducto() {
                 name="id_categoria"
                 required>
 
-                <option value="">Seleccione categoría</option>
+                <option value="" selected disabled>Seleccione una categoría</option>
                 <option value="1">Tortas</option>
                 <option value="2">Cupcakes</option>
                 <option value="3">Postres</option>
@@ -344,13 +360,13 @@ async function guardarProducto(e) {
 
         const resultado = await respuesta.json();
 
-        if (resultado.success) {
+        if (respuesta.ok && resultado.success) {
 
             alert("Producto registrado correctamente.");
 
-            mostrarProductos();
+            await mostrarProductos();
 
-            cargarDashboard();
+            await cargarDashboard();
 
         } else {
 
@@ -383,6 +399,14 @@ async function editarProducto(id) {
 
         const productos = await respuesta.json();
 
+        if (!Array.isArray(productos)) {
+
+            alert("No se pudieron obtener los productos.");
+
+            return;
+
+        }
+
         const producto = productos.find(
             p => p.id_producto == id
         );
@@ -394,6 +418,10 @@ async function editarProducto(id) {
             return;
 
         }
+
+        const imagen = producto.imagen
+            ? `http://localhost:3000/uploads/${producto.imagen}`
+            : "assets/images/cake.png";
 
         contenido.innerHTML = `
 
@@ -439,7 +467,7 @@ async function editarProducto(id) {
             <br><br>
 
             <img
-                src="http://localhost:3000/uploads/${producto.imagen}"
+                src="${imagen}"
                 width="120"
                 height="120"
                 style="object-fit:cover;border-radius:10px"
@@ -508,7 +536,6 @@ async function editarProducto(id) {
 }
 
 window.editarProducto = editarProducto;
-
 //=========================
 // ACTUALIZAR PRODUCTO
 //=========================
@@ -539,17 +566,17 @@ async function actualizarProducto(e, id) {
 
         const resultado = await respuesta.json();
 
-        if (resultado.success) {
+        if (respuesta.ok && resultado.success) {
 
             alert("Producto actualizado correctamente.");
 
-            mostrarProductos();
+            await mostrarProductos();
 
-            cargarDashboard();
+            await cargarDashboard();
 
         } else {
 
-            alert(resultado.mensaje || "No se pudo actualizar.");
+            alert(resultado.mensaje || "No se pudo actualizar el producto.");
 
         }
 
@@ -580,6 +607,17 @@ async function mostrarPedidos() {
         );
 
         const pedidos = await respuesta.json();
+
+        if (!Array.isArray(pedidos)) {
+
+            contenido.innerHTML = `
+                <h2>Pedidos</h2>
+                <p>${pedidos.mensaje || "No se pudieron cargar los pedidos."}</p>
+            `;
+
+            return;
+
+        }
 
         let html = `
 
@@ -628,7 +666,7 @@ async function mostrarPedidos() {
 
                 <td>${pedido.direccion || "-"}</td>
 
-                <td>${new Date(pedido.fecha).toLocaleDateString()}</td>
+                <td>${pedido.fecha ? new Date(pedido.fecha).toLocaleDateString() : "-"}</td>
 
                 <td>S/. ${Number(pedido.total).toFixed(2)}</td>
 
@@ -714,6 +752,14 @@ async function verDetalle(id) {
 
         const productos = await respuesta.json();
 
+        if (!Array.isArray(productos)) {
+
+            alert(productos.mensaje || "No se pudo obtener el detalle del pedido.");
+
+            return;
+
+        }
+
         let html = `
 
             <h3>Detalle del Pedido #${id}</h3>
@@ -742,6 +788,10 @@ async function verDetalle(id) {
 
         productos.forEach(producto => {
 
+            const imagen = producto.imagen
+                ? `http://localhost:3000/uploads/${producto.imagen}`
+                : "assets/images/cake.png";
+
             html += `
 
                 <tr>
@@ -749,7 +799,7 @@ async function verDetalle(id) {
                     <td>
 
                         <img
-                            src="http://localhost:3000/uploads/${producto.imagen}"
+                            src="${imagen}"
                             width="60"
                             height="60"
                             style="object-fit:cover;border-radius:8px"
@@ -801,9 +851,7 @@ async function guardarEstado(id) {
 
     try {
 
-        const estado = document.getElementById(
-            `estado${id}`
-        ).value;
+        const estado = document.getElementById(`estado${id}`).value;
 
         const respuesta = await fetch(
 
@@ -831,15 +879,17 @@ async function guardarEstado(id) {
 
         const datos = await respuesta.json();
 
-        if (datos.success) {
+        if (respuesta.ok && datos.success) {
 
             alert("Estado actualizado correctamente.");
 
-            cargarDashboard();
+            await mostrarPedidos();
+
+            await cargarDashboard();
 
         } else {
 
-            alert("No se pudo actualizar el estado.");
+            alert(datos.mensaje || "No se pudo actualizar el estado.");
 
         }
 
@@ -854,7 +904,6 @@ async function guardarEstado(id) {
 }
 
 window.guardarEstado = guardarEstado;
-
 //=========================
 // CLIENTES
 //=========================
@@ -870,6 +919,17 @@ async function mostrarClientes() {
         );
 
         const clientes = await respuesta.json();
+
+        if (!Array.isArray(clientes)) {
+
+            contenido.innerHTML = `
+                <h2>Clientes Registrados</h2>
+                <p>${clientes.mensaje || "No se pudieron cargar los clientes."}</p>
+            `;
+
+            return;
+
+        }
 
         let html = `
 
@@ -914,7 +974,11 @@ async function mostrarClientes() {
 
                     <td>${cliente.telefono || "-"}</td>
 
-                    <td>${new Date(cliente.fecha_registro).toLocaleDateString()}</td>
+                    <td>${
+                        cliente.fecha_registro
+                        ? new Date(cliente.fecha_registro).toLocaleDateString()
+                        : "-"
+                    }</td>
 
                 </tr>
 
@@ -953,7 +1017,6 @@ cerrarSesion.addEventListener("click", () => {
     if (!confirm("¿Desea cerrar sesión?")) return;
 
     localStorage.removeItem("usuario");
-
     localStorage.removeItem("carrito");
 
     window.location.href = "login.html";
