@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cakes Rick's</title>
+
+<link rel="stylesheet" href="assets/css/style.css">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+
+        CAKES
+        <span>RICK'S</span>
+
+    </div>
+
+    <button id="menuToggle" class="menu-toggle">
+
+    <i class="ri-menu-line"></i>
+
+</button>
+
+<nav id="menu">
+
+    <a class="active" href="index.html">Inicio</a>
+    <a href="#catalogo">Productos</a>
+    <a href="nosotros.html">Nosotros</a>
+    <a href="contacto.html">Contacto</a>
+
+</nav>
+
+    <div class="right">
+
+        <div class="search">
+
+            <i class="ri-search-line"></i>
+
+<input
+    type="text"
+    id="buscador"
+    placeholder="Buscar pastel...">
+        </div>
+
+        <button id="cartButton" class="cart-button">
+
+            <i class="ri-shopping-bag-3-line"></i>
+
+            <span id="cart-count">0</span>
+
+        </button>
+
+        <div id="perfil"></div>
+
+    </div>
+
+</header>
+
+<section class="hero">
+
+    <div class="hero-left">
+
+        <p class="small">
+
+            PASTELERÍA PREMIUM
+
+        </p>
+
+        <h1>
+
+            Cada pastel cuenta una historia.
+
+        </h1>
+
+        <p class="description">
+
+            Diseñamos experiencias dulces para celebraciones inolvidables, utilizando ingredientes seleccionados y acabados artesanales.
+
+        </p>
+
+        <div class="buttons">
+
+            <button id="btnCatalogo" class="primary">
+
+                Explorar catálogo
+
+            </button>
+
+            <button id="btnNosotros" class="secondary">
+
+                Nosotros
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="hero-right">
+
+        <img src="assets/images/cake.png" alt="Cake">
+
+    </div>
+
+</section>
+
+<section id="catalogo" class="productos">
+
+    <div class="titulo">
+
+        <h2>Nuestros Productos</h2>
+
+        <p>Elige tu favorito</p>
+
+    </div>
+
+    <div id="productos" class="grid-productos">
+
+    </div>
+
+</section>
+
+<!-- Overlay -->
+
+<div id="overlay" class="overlay"></div>
+
+<!-- Carrito -->
+
+<aside id="cartSidebar" class="cart-sidebar">
+
+    <div class="cart-header">
+
+        <h2>Mi carrito</h2>
+
+        <button id="closeCart">
+
+            <i class="ri-close-line"></i>
+
+        </button>
+
+    </div>
+
+    <div id="cartItems" class="cart-items">
+
+        <p class="empty-cart">
+
+            Tu carrito está vacío.
+
+        </p>
+
+    </div>
+
+    <div class="cart-footer">
+
+        <div class="cart-total">
+
+            <span>Total</span>
+
+            <strong id="cartTotal">
+
+                S/. 0.00
+
+            </strong>
+
+        </div>
+
+        <button class="checkout">
+
+            Finalizar compra
+
+        </button>
+
+    </div>
+
+</aside>
+
+<script src="assets/js/cart.js"></script>
+<script src="assets/js/productos.js"></script>
+<script src="assets/js/home.js"></script>
+<script src="assets/js/session.js"></script>
+<script src="assets/js/menu.js"></script>
+
+</body>
+
+</html>

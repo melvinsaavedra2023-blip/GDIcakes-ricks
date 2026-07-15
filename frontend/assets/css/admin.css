@@ -1,0 +1,429 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+
+    background:#f5f5f5;
+
+}
+
+.admin{
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+/*=====================
+SIDEBAR
+=====================*/
+
+.sidebar{
+
+    width:260px;
+
+    background:#111;
+
+    color:#fff;
+
+    padding:30px 20px;
+
+}
+
+.sidebar h2{
+
+    text-align:center;
+
+    margin-bottom:40px;
+
+    font-size:26px;
+
+}
+
+.sidebar ul{
+
+    list-style:none;
+
+}
+
+.sidebar li{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    padding:15px;
+
+    border-radius:10px;
+
+    margin-bottom:12px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.sidebar li:hover{
+
+    background:#2d2d2d;
+
+}
+
+.sidebar .active{
+
+    background:#fff;
+
+    color:#111;
+
+}
+
+/*=====================
+CONTENIDO
+=====================*/
+
+.contenido{
+
+    flex:1;
+
+    padding:40px;
+
+}
+
+.contenido h1{
+
+    margin-bottom:30px;
+
+}
+
+/*=====================
+CARDS
+=====================*/
+
+.cards{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:25px;
+
+    margin-bottom:40px;
+
+}
+
+.card{
+
+    background:#fff;
+
+    border-radius:15px;
+
+    padding:30px;
+
+    box-shadow:0 10px 20px rgba(0,0,0,.08);
+
+}
+
+.card h3{
+
+    color:#666;
+
+    margin-bottom:15px;
+
+}
+
+.card span{
+
+    font-size:40px;
+
+    font-weight:bold;
+
+    color:#111;
+
+}
+
+/*=====================
+TABLAS
+=====================*/
+
+table{
+
+    width:100%;
+
+    background:#fff;
+
+    border-collapse:collapse;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    box-shadow:0 10px 20px rgba(0,0,0,.08);
+
+}
+
+th{
+
+    background:#111;
+
+    color:#fff;
+
+    padding:15px;
+
+}
+
+td{
+
+    padding:15px;
+
+    border-bottom:1px solid #eee;
+
+}
+
+tr:hover{
+
+    background:#f8f8f8;
+
+}
+
+/*=====================
+BOTONES
+=====================*/
+
+.btn{
+
+    padding:10px 18px;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+}
+
+.btn-editar{
+
+    background:#111;
+
+    color:white;
+
+}
+
+.btn-eliminar{
+
+    background:#d62828;
+
+    color:white;
+
+}
+
+/*=====================
+MENÚ MÓVIL
+=====================*/
+
+.menu-admin{
+
+    display:none;
+
+    position:fixed;
+
+    top:20px;
+
+    left:20px;
+
+    width:50px;
+
+    height:50px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#111;
+
+    color:#fff;
+
+    font-size:24px;
+
+    cursor:pointer;
+
+    z-index:3000;
+
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+
+}
+
+/*=====================
+FORMULARIOS
+=====================*/
+
+input,
+textarea,
+select{
+
+    width:100%;
+
+    padding:12px;
+
+    border:1px solid #ddd;
+
+    border-radius:10px;
+
+    font-size:15px;
+
+    margin-bottom:10px;
+
+}
+
+textarea{
+
+    resize:vertical;
+
+    min-height:120px;
+
+}
+
+/*=====================
+RESPONSIVE
+=====================*/
+
+@media(max-width:992px){
+
+    .cards{
+
+        grid-template-columns:repeat(2,1fr);
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .menu-admin{
+
+        display:flex;
+
+        justify-content:center;
+
+        align-items:center;
+
+    }
+
+    .sidebar{
+
+        position:fixed;
+
+        top:0;
+
+        left:-270px;
+
+        width:260px;
+
+        height:100vh;
+
+        z-index:2500;
+
+        transition:.35s;
+
+    }
+
+    .sidebar.activo{
+
+        left:0;
+
+    }
+
+    .contenido{
+
+        width:100%;
+
+        padding:90px 20px 25px;
+
+    }
+
+    .cards{
+
+        grid-template-columns:1fr;
+
+    }
+
+    .card{
+
+        padding:22px;
+
+    }
+
+    .card span{
+
+        font-size:34px;
+
+    }
+
+    table{
+
+        display:block;
+
+        overflow-x:auto;
+
+        white-space:nowrap;
+
+    }
+
+    .btn{
+
+        padding:8px 14px;
+
+        font-size:13px;
+
+    }
+
+}
+
+@media(max-width:480px){
+
+    .contenido h1{
+
+        font-size:28px;
+
+    }
+
+    .card{
+
+        padding:18px;
+
+    }
+
+    .card span{
+
+        font-size:30px;
+
+    }
+
+    th,
+    td{
+
+        padding:12px;
+
+        font-size:14px;
+
+    }
+
+    input,
+    textarea,
+    select{
+
+        font-size:14px;
+
+    }
+
+}

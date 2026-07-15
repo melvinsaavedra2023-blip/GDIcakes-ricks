@@ -1,0 +1,458 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+
+    min-height:100vh;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    background:#f8f9fb;
+
+}
+
+/* LADO IZQUIERDO */
+
+.login-image{
+
+    background:url("../images/login-cake.jpg") center center;
+
+    background-size:cover;
+
+    position:relative;
+
+}
+
+.login-image::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:rgba(20,20,20,.35);
+
+}
+
+.login-text{
+
+    position:absolute;
+
+    left:70px;
+
+    bottom:80px;
+
+    color:white;
+
+    z-index:2;
+
+}
+
+.login-text h1{
+
+    font-size:55px;
+
+    margin-bottom:10px;
+
+    font-weight:700;
+
+}
+
+.login-text p{
+
+    font-size:18px;
+
+    color:#ececec;
+
+}
+
+/* LADO DERECHO */
+
+.login-right{
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:white;
+
+}
+
+.login-container{
+
+    width:420px;
+
+}
+
+.logo{
+
+    font-size:34px;
+
+    font-weight:800;
+
+    color:#111;
+
+    margin-bottom:10px;
+
+}
+
+.logo span{
+
+    color:#7a7a7a;
+
+}
+
+.subtitle{
+
+    color:#7b7b7b;
+
+    margin-bottom:40px;
+
+}
+
+.input-group{
+
+    margin-bottom:22px;
+
+}
+
+.input-group label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#555;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.input-group input{
+
+    width:100%;
+
+    padding:16px;
+
+    border:1px solid #d9d9d9;
+
+    border-radius:12px;
+
+    outline:none;
+
+    transition:.3s;
+
+    font-size:15px;
+
+}
+
+.input-group input:focus{
+
+    border-color:#444;
+
+    box-shadow:0 0 0 4px rgba(0,0,0,.08);
+
+}
+
+.btn-login{
+
+    width:100%;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:#1f2937;
+
+    color:white;
+
+    font-size:15px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.btn-login:hover{
+
+    background:#111827;
+
+    transform:translateY(-2px);
+
+}
+
+.register{
+
+    margin-top:25px;
+
+    text-align:center;
+
+    color:#777;
+
+}
+
+.register a{
+
+    color:#111;
+
+    font-weight:600;
+
+    text-decoration:none;
+
+}
+
+.register a:hover{
+
+    text-decoration:underline;
+
+}
+
+@media(max-width:900px){
+
+body{
+
+grid-template-columns:1fr;
+
+}
+
+.login-image{
+
+display:none;
+
+}
+
+.login-right{
+
+padding:40px;
+
+}
+
+}
+
+/*=========================
+SEPARADOR
+=========================*/
+
+.separador{
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin:28px 0;
+
+    width:100%;
+
+}
+
+.separador::before,
+.separador::after{
+
+    content:"";
+
+    flex:1;
+
+    height:1px;
+
+    background:#d9d9d9;
+
+}
+
+.separador span{
+
+    margin:0 18px;
+
+    color:#888;
+
+    font-size:15px;
+
+    font-weight:600;
+
+}
+
+/*=========================
+BOTÓN GOOGLE
+=========================*/
+
+#g_id_onload{
+
+    display:flex;
+    justify-content:center;
+
+}
+
+.g_id_signin{
+
+    display:flex !important;
+    justify-content:center !important;
+    margin:0 auto !important;
+
+}
+
+div:has(> .g_id_signin){
+
+    display:flex;
+    justify-content:center;
+
+}
+.google-login{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    margin-top:10px;
+
+}
+
+/*=========================
+MÓVILES
+=========================*/
+
+@media(max-width:768px){
+
+    body{
+
+        display:block;
+
+        min-height:100vh;
+
+    }
+
+    .login-image{
+
+        display:none;
+
+    }
+
+    .login-right{
+
+        min-height:100vh;
+
+        padding:30px 20px;
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+    }
+
+    .login-container{
+
+        width:100%;
+
+        max-width:400px;
+
+    }
+
+    .logo{
+
+        font-size:30px;
+
+        text-align:center;
+
+    }
+
+    .subtitle{
+
+        text-align:center;
+
+        margin-bottom:30px;
+
+    }
+
+    .input-group input{
+
+        padding:15px;
+
+    }
+
+    .btn-login{
+
+        padding:15px;
+
+    }
+
+}
+
+/*=========================
+CELULARES PEQUEÑOS
+=========================*/
+
+@media(max-width:480px){
+
+    .login-right{
+
+        padding:20px 15px;
+
+    }
+
+    .logo{
+
+        font-size:26px;
+
+    }
+
+    .subtitle{
+
+        font-size:14px;
+
+    }
+
+    .input-group label{
+
+        font-size:13px;
+
+    }
+
+    .input-group input{
+
+        font-size:14px;
+
+        padding:14px;
+
+    }
+
+    .btn-login{
+
+        font-size:14px;
+
+        padding:14px;
+
+    }
+
+    .register{
+
+        font-size:14px;
+
+    }
+
+    .google-login{
+
+        transform:scale(.95);
+
+    }
+
+}

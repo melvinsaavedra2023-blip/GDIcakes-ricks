@@ -1,0 +1,292 @@
+.hero{
+
+height:100vh;
+
+padding:150px 8% 0;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+}
+
+.hero-left{
+
+width:48%;
+
+}
+
+.small{
+
+letter-spacing:5px;
+
+font-size:13px;
+
+color:#8A8A8A;
+
+margin-bottom:25px;
+
+}
+
+.hero-left h1{
+
+font-size:74px;
+
+line-height:82px;
+
+font-weight:800;
+
+margin-bottom:25px;
+
+}
+
+.description{
+
+font-size:18px;
+
+line-height:34px;
+
+color:#666;
+
+max-width:560px;
+
+}
+
+.buttons{
+
+display:flex;
+
+gap:18px;
+
+margin-top:45px;
+
+}
+
+.primary{
+
+padding:18px 40px;
+
+border:none;
+
+border-radius:60px;
+
+background:#111;
+
+color:white;
+
+font-size:15px;
+
+}
+
+.secondary{
+
+padding:18px 40px;
+
+border-radius:60px;
+
+border:1px solid #DDD;
+
+background:white;
+
+font-size:15px;
+
+}
+
+.hero-right{
+
+width:45%;
+
+display:flex;
+
+justify-content:center;
+
+}
+
+.hero-right img{
+
+width:600px;
+max-width:100%;
+height:auto;
+
+border-radius:30px;
+
+object-fit:cover;
+
+box-shadow:0 25px 60px rgba(0,0,0,.15);
+
+animation:float 5s ease-in-out infinite;
+
+}
+
+@keyframes float{
+
+0%{
+
+transform:translateY(0);
+
+}
+
+50%{
+
+transform:translateY(-18px);
+
+}
+
+100%{
+
+transform:translateY(0);
+
+}
+
+}
+
+/*=========================
+TABLET
+=========================*/
+
+@media (max-width:1024px){
+
+    .hero{
+
+        padding:140px 6% 60px;
+
+        gap:40px;
+
+    }
+
+    .hero-left h1{
+
+        font-size:58px;
+
+        line-height:65px;
+
+    }
+
+    .hero-right img{
+
+        width:450px;
+
+    }
+
+}
+
+/*=========================
+CELULAR
+=========================*/
+
+@media (max-width:768px){
+
+    .hero{
+
+        height:auto;
+
+        padding:120px 20px 60px;
+
+        flex-direction:column-reverse;
+
+        text-align:center;
+
+        gap:40px;
+
+    }
+
+    .hero-left{
+
+        width:100%;
+
+    }
+
+    .hero-right{
+
+        width:100%;
+
+    }
+
+    .hero-right img{
+
+        width:320px;
+
+        max-width:90%;
+
+    }
+
+    .small{
+
+        letter-spacing:3px;
+
+        font-size:12px;
+
+    }
+
+    .hero-left h1{
+
+        font-size:42px;
+
+        line-height:50px;
+
+    }
+
+    .description{
+
+        max-width:100%;
+
+        font-size:16px;
+
+        line-height:28px;
+
+    }
+
+    .buttons{
+
+        flex-direction:column;
+
+        width:100%;
+
+    }
+
+    .primary,
+    .secondary{
+
+        width:100%;
+
+    }
+
+}
+
+/*=========================
+CELULARES PEQUEÑOS
+=========================*/
+
+@media (max-width:480px){
+
+    .hero{
+
+        padding:110px 15px 40px;
+
+    }
+
+    .hero-left h1{
+
+        font-size:34px;
+
+        line-height:42px;
+
+    }
+
+    .description{
+
+        font-size:15px;
+
+        line-height:25px;
+
+    }
+
+    .hero-right img{
+
+        width:260px;
+
+    }
+
+}

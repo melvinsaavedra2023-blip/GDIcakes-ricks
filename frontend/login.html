@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Iniciar Sesión</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/login.css">
+
+<!-- GOOGLE -->
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+</head>
+
+<body>
+
+<div class="login-image">
+
+    <div class="login-text">
+
+        <h1>CAKES RICK'S</h1>
+
+        <p>Pastelería artesanal para momentos inolvidables.</p>
+
+    </div>
+
+</div>
+
+<div class="login-right">
+
+    <div class="login-container">
+
+        <div class="logo">
+
+            CAKES <span>RICK'S</span>
+
+        </div>
+
+        <p class="subtitle">
+
+            Bienvenido nuevamente
+
+        </p>
+
+        <form id="loginForm">
+
+            <div class="input-group">
+
+                <label>Usuario</label>
+
+                <input
+                type="text"
+                id="usuario"
+                placeholder="Ingrese su usuario"
+                required>
+
+            </div>
+
+            <div class="input-group">
+
+                <label>Contraseña</label>
+
+                <input
+                type="password"
+                id="password"
+                placeholder="Ingrese su contraseña"
+                required>
+
+            </div>
+
+            <button
+            class="btn-login"
+            type="submit">
+
+                Iniciar sesión
+
+            </button>
+
+        </form>
+
+        <div class="separador">
+
+            <span>o</span>
+
+        </div>
+
+        <!-- BOTÓN GOOGLE -->
+
+        <div
+            id="g_id_onload"
+            data-client_id="1094021375062-vp0v7r7bmuupsbuefa33vii1g0b5siip.apps.googleusercontent.com"
+            data-callback="handleCredentialResponse">
+        </div>
+
+        <div class="google-login">
+
+    <div
+        class="g_id_signin"
+        data-type="standard"
+        data-shape="pill"
+        data-theme="outline"
+        data-text="continue_with"
+        data-size="large"
+        data-logo_alignment="left"
+        data-width="320">
+    </div>
+
+</div>
+
+        <div class="register">
+
+            ¿No tienes una cuenta?
+
+            <a href="registro.html">
+
+                Crear cuenta
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="assets/js/login.js"></script>
+
+<script src="assets/js/google.js"></script>
+
+</body>
+
+</html>

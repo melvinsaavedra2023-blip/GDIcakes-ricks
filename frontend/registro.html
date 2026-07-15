@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Crear Cuenta</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/login.css">
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+</head>
+
+<body>
+
+<div class="login-image">
+
+    <div class="login-text">
+
+        <h1>CAKES RICK'S</h1>
+
+        <p>Crea tu cuenta y disfruta de nuestros productos.</p>
+
+    </div>
+
+</div>
+
+<div class="login-right">
+
+<div class="login-container">
+
+<div class="logo">
+
+CAKES <span>RICK'S</span>
+
+</div>
+
+<p class="subtitle">
+
+Crear una cuenta
+
+</p>
+
+<form id="registroForm">
+
+<div class="input-group">
+
+<label>Nombre</label>
+
+<input
+type="text"
+id="nombre"
+placeholder="Ingrese su nombre"
+required>
+
+</div>
+
+<div class="input-group">
+
+<label>Apellido</label>
+
+<input
+type="text"
+id="apellido"
+placeholder="Ingrese su apellido"
+required>
+</div>
+
+<div class="input-group">
+
+<label>Correo</label>
+
+<input
+type="email"
+id="correo"
+placeholder="correo@ejemplo.com"
+required>
+</div>
+
+<div class="input-group">
+
+<label>Usuario</label>
+
+<input
+type="email"
+id="correo"
+placeholder="correo@ejemplo.com"
+required>
+</div>
+
+<div class="input-group">
+
+<label>Contraseña</label>
+
+<input
+type="password"
+id="password"
+placeholder="Contraseña"
+required>
+
+</div>
+
+<div class="input-group">
+
+<label>Confirmar contraseña</label>
+
+<input
+type="password"
+id="confirmar"
+placeholder="Confirmar contraseña"
+required>
+</div>
+
+<button
+class="btn-login"
+type="submit">
+
+Crear Cuenta
+
+</button>
+
+</form>
+
+<div class="separador">
+
+<span>o</span>
+
+</div>
+
+<div id="g_id_onload"
+data-client_id="1094021375062-vp0v7r7bmuupsbuefa33vii1g0b5siip.apps.googleusercontent.com"
+data-callback="handleCredentialResponse">
+</div>
+
+<div class="google-login">
+
+<div class="g_id_signin"
+data-type="standard"
+data-shape="pill"
+data-theme="outline"
+data-text="continue_with"
+data-size="large"
+data-width="320">
+</div>
+
+</div>
+
+<div class="register">
+
+¿Ya tienes una cuenta?
+
+<a href="login.html">
+
+Iniciar sesión
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="assets/js/google.js"></script>
+<script src="assets/js/registro.js"></script>
+
+</body>
+
+</html>

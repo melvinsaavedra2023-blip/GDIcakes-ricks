@@ -1,0 +1,278 @@
+body{
+
+    background:#f8f6f3;
+    font-family:'Inter',sans-serif;
+
+}
+
+.contacto{
+
+    max-width:1250px;
+    margin:45px auto;
+    padding:0 35px;
+
+}
+
+.titulo-contacto{
+
+    text-align:center;
+    margin-bottom:40px;
+
+}
+
+.titulo-contacto h1{
+
+    font-size:42px;
+    color:#3a2e24;
+    margin-bottom:10px;
+
+}
+
+.titulo-contacto p{
+
+    color:#7d746b;
+    font-size:17px;
+
+}
+
+.contacto-grid{
+
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    gap:35px;
+    align-items:start;
+
+}
+
+.mapa iframe{
+
+    width:100%;
+    height:430px;
+    border:none;
+    border-radius:18px;
+    box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.info-contacto{
+
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+
+}
+
+.info-card{
+
+    background:#fff;
+    border-radius:16px;
+    padding:20px 24px;
+    border:1px solid #ebe6df;
+    transition:.30s;
+
+}
+
+.info-card:hover{
+
+    border-color:#b08a57;
+    transform:translateY(-3px);
+
+}
+
+.info-card h3{
+
+    color:#3a2e24;
+    font-size:18px;
+    margin-bottom:8px;
+
+}
+
+.info-card p{
+
+    color:#666;
+    line-height:1.7;
+    font-size:15px;
+
+}
+
+.redes{
+
+    display:flex;
+    align-items:center;
+    gap:18px;
+    margin-top:8px;
+
+}
+
+.redes a{
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-decoration:none;
+
+}
+
+.redes img{
+
+    width:36px;
+    height:36px;
+    transition:.30s;
+    object-fit:contain;
+
+}
+
+.redes img:hover{
+
+    transform:scale(1.12);
+
+}
+
+@media(max-width:1000px){
+
+.contacto-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.mapa iframe{
+
+height:350px;
+
+}
+
+}
+
+@media(max-width:700px){
+
+.contacto{
+
+padding:0 20px;
+
+}
+
+.titulo-contacto h1{
+
+font-size:34px;
+
+}
+
+}
+
+.right{
+
+display:flex;
+align-items:center;
+gap:18px;
+
+}
+
+.search{
+
+display:none;
+
+}
+
+/*=========================
+RESPONSIVE CONTACTO
+=========================*/
+
+@media(max-width:768px){
+
+    .contacto{
+
+        margin:120px auto 40px;
+        padding:0 20px;
+
+    }
+
+    .titulo-contacto{
+
+        margin-bottom:30px;
+
+    }
+
+    .titulo-contacto h1{
+
+        font-size:32px;
+
+    }
+
+    .titulo-contacto p{
+
+        font-size:15px;
+
+    }
+
+    .contacto-grid{
+
+        grid-template-columns:1fr;
+
+        gap:25px;
+
+    }
+
+    .mapa iframe{
+
+        height:300px;
+
+    }
+
+    .info-card{
+
+        padding:18px;
+
+    }
+
+    .info-card h3{
+
+        font-size:17px;
+
+    }
+
+    .info-card p{
+
+        font-size:14px;
+
+    }
+
+    .redes{
+
+        justify-content:center;
+
+    }
+
+}
+
+@media(max-width:480px){
+
+    .contacto{
+
+        margin:110px auto 30px;
+
+        padding:0 15px;
+
+    }
+
+    .titulo-contacto h1{
+
+        font-size:28px;
+
+    }
+
+    .mapa iframe{
+
+        height:250px;
+
+        border-radius:15px;
+
+    }
+
+    .info-card{
+
+        border-radius:14px;
+
+    }
+
+}

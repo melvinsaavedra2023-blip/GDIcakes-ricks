@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Finalizar compra | Cakes Rick's</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/css/checkout.css">
+
+</head>
+
+<body>
+
+<div class="checkout-container">
+
+    <div class="checkout-left">
+
+        <div class="card">
+
+            <a href="index.html" class="volver">
+
+    <i class="ri-arrow-left-line"></i>
+
+    Seguir comprando
+
+</a>
+
+            <h1>Finalizar compra</h1>
+
+            <p class="subtitle">
+
+                Complete la información para finalizar su pedido.
+
+            </p>
+
+            <form id="checkoutForm">
+
+                <div class="form-group">
+
+                    <label>Nombre completo</label>
+
+                    <input
+type="text"
+id="nombre"
+placeholder="Ingrese su nombre completo"
+autocomplete="name"
+required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Teléfono</label>
+
+                    <input
+type="text"
+id="telefono"
+placeholder="Ingrese su teléfono"
+autocomplete="tel"
+required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Dirección de entrega</label>
+
+                    <input
+type="text"
+id="telefono"
+placeholder="Ingrese su teléfono"
+autocomplete="tel"
+required>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Método de pago</label>
+
+                    <select id="metodoPago">
+
+                        <option>Yape</option>
+                        <option>Plin</option>
+                        <option>BCP</option>
+                        <option>Efectivo</option>
+
+                    </select>
+
+                </div>
+
+                <button type="submit" class="btn-confirmar">
+
+                    Confirmar compra
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div class="checkout-right">
+
+        <div class="resumen-card">
+
+            <h2>
+
+<i class="ri-shopping-bag-3-line"></i>
+
+Resumen de compra
+
+</h2>
+
+            <div id="resumenPedido">
+
+            </div>
+
+            <div id="totalPedido">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="assets/js/checkout.js"></script>
+
+</body>
+
+</html>

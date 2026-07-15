@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Panel Administrativo</title>
+
+    <link rel="stylesheet" href="assets/css/admin.css">
+
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+</head>
+
+<body>
+<button id="menuAdmin" class="menu-admin">
+
+    <i class="ri-menu-line"></i>
+
+</button>
+<div class="admin">
+
+<aside class="sidebar" id="sidebar">
+        <h2>CAKES RICK'S</h2>
+
+        <ul>
+
+            <li class="active">
+
+                <i class="ri-dashboard-line"></i>
+
+                Dashboard
+
+            </li>
+
+            <li id="menuProductos">
+
+                <i class="ri-cake-3-line"></i>
+
+                Productos
+
+            </li>
+
+            <li id="menuPedidos">
+
+                <i class="ri-shopping-bag-line"></i>
+
+                Pedidos
+
+            </li>
+
+            <li id="menuUsuarios">
+
+                <i class="ri-group-line"></i>
+
+                Clientes
+
+            </li>
+
+            <li id="cerrarSesion">
+
+                <i class="ri-logout-box-line"></i>
+
+                Cerrar sesión
+
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <main class="contenido">
+
+        <h1>Dashboard</h1>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <h3>Productos</h3>
+
+                <span id="totalProductos">0</span>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Pedidos Pendientes</h3>
+
+                <span id="totalPedidos">0</span>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Usuarios</h3>
+
+                <span id="totalUsuarios">0</span>
+
+            </div>
+
+            <div class="card">
+
+                <h3>Ventas</h3>
+
+                <span id="totalVentas">S/. 0.00</span>
+
+            </div>
+
+        </div>
+
+        <div id="contenidoAdmin">
+
+            <h2>Bienvenido al Panel Administrativo</h2>
+
+            <p>
+
+                Selecciona una opción del menú lateral.
+
+            </p>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+
+const usuario = JSON.parse(localStorage.getItem("usuario"));
+
+if(!usuario){
+
+    window.location.href = "login.html";
+
+}
+
+if(usuario.rol !== "Administrador"){
+
+    window.location.href = "index.html";
+
+}
+
+</script>
+
+<script src="assets/js/admin.js"></script>
+<script>
+
+const menuAdmin = document.getElementById("menuAdmin");
+const sidebar = document.getElementById("sidebar");
+
+menuAdmin.addEventListener("click", () => {
+
+    sidebar.classList.toggle("activo");
+
+});
+
+document.querySelectorAll(".sidebar li").forEach(item => {
+
+    item.addEventListener("click", () => {
+
+        if(window.innerWidth <= 768){
+
+            sidebar.classList.remove("activo");
+
+        }
+
+    });
+
+});
+
+</script>
+</body>
+
+</html>

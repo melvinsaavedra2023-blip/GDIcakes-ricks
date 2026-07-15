@@ -1,0 +1,287 @@
+body{
+
+    margin:0;
+
+    font-family:'Inter',sans-serif;
+
+    background:#f5f5f5;
+
+}
+
+.contenedor-detalle{
+
+    max-width:900px;
+
+    margin:40px auto;
+
+    padding:20px;
+
+}
+
+.detalle-card{
+
+    background:#fff;
+
+    border-radius:12px;
+
+    padding:30px;
+
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+
+}
+
+.detalle-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+.btn-volver{
+
+    background:#d32f2f;
+
+    color:#fff;
+
+    text-decoration:none;
+
+    padding:10px 18px;
+
+    border-radius:8px;
+
+    font-weight:bold;
+
+}
+
+.btn-volver:hover{
+
+    background:#b71c1c;
+
+}
+
+.producto-detalle{
+
+    display:flex;
+
+    gap:20px;
+
+    align-items:center;
+
+    border-bottom:1px solid #eee;
+
+    padding:18px 0;
+
+}
+
+.producto-detalle img{
+
+    width:90px;
+
+    height:90px;
+
+    object-fit:cover;
+
+    border-radius:10px;
+
+}
+
+.producto-info{
+
+    flex:1;
+
+}
+
+.producto-info h3{
+
+    margin:0 0 10px;
+
+}
+
+.producto-info p{
+
+    margin:4px 0;
+
+    color:#666;
+
+}
+
+.total-pedido{
+
+    margin-top:25px;
+
+    text-align:right;
+
+    font-size:22px;
+
+    font-weight:bold;
+
+    color:#d32f2f;
+
+}
+
+/*=========================
+MEJORAS
+=========================*/
+
+.detalle-header h1{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-size:32px;
+
+    color:#222;
+
+}
+
+.btn-volver{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    transition:.3s;
+
+}
+
+.btn-volver:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.producto-detalle{
+
+    transition:.3s;
+
+}
+
+.producto-detalle:hover{
+
+    background:#fafafa;
+
+    border-radius:12px;
+
+}
+
+.producto-info h3{
+
+    color:#222;
+
+}
+
+.total-pedido{
+
+    padding-top:20px;
+
+    border-top:2px solid #eee;
+
+}
+
+/*=========================
+TABLETS
+=========================*/
+
+@media(max-width:768px){
+
+    .contenedor-detalle{
+
+        margin:25px auto;
+
+        padding:15px;
+
+    }
+
+    .detalle-card{
+
+        padding:22px;
+
+    }
+
+    .detalle-header{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:18px;
+
+    }
+
+    .detalle-header h1{
+
+        font-size:26px;
+
+    }
+
+}
+
+/*=========================
+CELULARES
+=========================*/
+
+@media(max-width:480px){
+
+    .detalle-card{
+
+        padding:18px;
+
+        border-radius:18px;
+
+    }
+
+    .detalle-header h1{
+
+        font-size:22px;
+
+    }
+
+    .btn-volver{
+
+        width:100%;
+
+        justify-content:center;
+
+    }
+
+    .producto-detalle{
+
+        flex-direction:column;
+
+        text-align:center;
+
+    }
+
+    .producto-detalle img{
+
+        width:120px;
+
+        height:120px;
+
+    }
+
+    .producto-info{
+
+        width:100%;
+
+    }
+
+    .total-pedido{
+
+        text-align:center;
+
+        font-size:20px;
+
+    }
+
+}

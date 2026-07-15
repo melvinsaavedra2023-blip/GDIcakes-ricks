@@ -1,0 +1,530 @@
+.productos{
+
+padding:120px 8%;
+
+background:#fafafa;
+
+}
+
+.titulo{
+
+text-align:center;
+
+margin-bottom:70px;
+
+}
+
+.titulo h2{
+
+font-size:34px;
+
+font-weight:800;
+
+margin-bottom:8px;
+
+}
+
+.titulo p{
+
+font-size:15px;
+
+color:#777;
+
+}
+.grid-productos{
+
+display:grid;
+
+grid-template-columns:repeat(auto-fit,minmax(270px,1fr));
+
+gap:28px;
+
+}
+
+.card{
+
+background:#fff;
+
+border-radius:20px;
+
+overflow:hidden;
+
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+
+transition:.3s;
+
+position:relative;
+
+max-width:320px;
+
+margin:auto;
+
+}
+
+.card:hover{
+
+transform:translateY(-12px);
+
+box-shadow:0 25px 60px rgba(0,0,0,.12);
+
+}
+
+.card img{
+
+width:100%;
+
+height:220px;
+
+object-fit:cover;
+
+transition:.35s;
+
+}
+
+.card:hover img{
+
+transform:scale(1.08);
+
+}
+
+.card-body{
+
+padding:20px;
+
+}
+
+.card-body h3{
+
+font-size:18px;
+
+font-weight:700;
+
+margin-bottom:6px;
+
+}
+
+.card-body p{
+
+font-size:13px;
+
+line-height:20px;
+
+height:40px;
+
+color:#777;
+
+}
+
+.card-body .precio{
+
+display:block !important;
+
+font-size:16px !important;
+
+font-weight:600 !important;
+
+color:#111 !important;
+
+margin:10px 0 !important;
+
+line-height:1.2 !important;
+
+}
+
+.card-body .stock{
+
+display:inline-block;
+
+padding:4px 10px;
+
+background:#eef8ef;
+
+color:#2e7d32;
+
+border-radius:15px;
+
+font-size:10px;
+
+font-weight:500;
+
+line-height:1;
+
+margin-bottom:12px;
+
+}
+
+.card button{
+
+width:100%;
+
+height:42px;
+
+border:none;
+
+border-radius:10px;
+
+background:#111;
+
+color:#fff;
+
+font-size:13px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.card button:hover{
+
+background:#d18c38;
+
+}
+
+/*========== CARRITO ==========*/
+
+.overlay{
+
+position:fixed;
+
+top:0;
+
+left:0;
+
+width:100%;
+
+height:100%;
+
+background:rgba(0,0,0,.45);
+
+opacity:0;
+
+visibility:hidden;
+
+transition:.3s;
+
+z-index:999;
+
+}
+
+.overlay.active{
+
+opacity:1;
+
+visibility:visible;
+
+}
+
+.cart-sidebar{
+
+position:fixed;
+
+top:0;
+
+right:-430px;
+
+width:420px;
+
+height:100vh;
+
+background:white;
+
+box-shadow:-10px 0 40px rgba(0,0,0,.15);
+
+display:flex;
+
+flex-direction:column;
+
+transition:.35s;
+
+z-index:1000;
+
+}
+
+.cart-sidebar.active{
+
+right:0;
+
+}
+
+.cart-header{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:25px;
+
+border-bottom:1px solid #eee;
+
+}
+
+.cart-header h2{
+
+font-size:28px;
+
+}
+
+.cart-header button{
+
+border:none;
+
+background:none;
+
+font-size:30px;
+
+cursor:pointer;
+
+}
+
+.cart-items{
+
+flex:1;
+
+overflow:auto;
+
+padding:20px;
+
+}
+
+.empty-cart{
+
+text-align:center;
+
+color:#999;
+
+margin-top:80px;
+
+}
+
+.cart-product{
+
+display:flex;
+
+gap:15px;
+
+margin-bottom:20px;
+
+padding-bottom:20px;
+
+border-bottom:1px solid #eee;
+
+}
+
+.cart-product img{
+
+width:80px;
+
+height:80px;
+
+object-fit:cover;
+
+border-radius:15px;
+
+}
+
+.cart-info{
+
+flex:1;
+
+}
+
+.cart-info h4{
+
+margin-bottom:5px;
+
+}
+
+.cart-info p{
+
+color:#777;
+
+}
+
+.cart-footer{
+
+padding:25px;
+
+border-top:1px solid #eee;
+
+}
+
+.cart-total{
+
+display:flex;
+
+justify-content:space-between;
+
+font-size:22px;
+
+margin-bottom:20px;
+
+}
+
+.checkout{
+
+width:100%;
+
+height:55px;
+
+border:none;
+
+background:#111;
+
+color:white;
+
+border-radius:50px;
+
+font-size:16px;
+
+cursor:pointer;
+
+transition:.3s;
+
+}
+
+.checkout:hover{
+
+background:#d18c38;
+
+}
+
+/*=========================================
+RESPONSIVE - INICIO
+=========================================*/
+
+/* Laptop */
+
+@media (max-width:1200px){
+
+    .grid-productos{
+
+        grid-template-columns:repeat(3,1fr);
+
+    }
+
+}
+
+/* Tablet */
+
+@media (max-width:992px){
+
+    .productos{
+
+        padding:90px 30px;
+
+    }
+
+    .grid-productos{
+
+        grid-template-columns:repeat(2,1fr);
+
+        gap:22px;
+
+    }
+
+    .card{
+
+        max-width:100%;
+
+    }
+
+}
+
+/* Celular */
+
+@media (max-width:768px){
+
+    .productos{
+
+        padding:70px 20px;
+
+    }
+
+    .titulo{
+
+        margin-bottom:40px;
+
+    }
+
+    .titulo h2{
+
+        font-size:28px;
+
+    }
+
+    .grid-productos{
+
+        grid-template-columns:1fr;
+
+        gap:25px;
+
+    }
+
+    .card{
+
+        width:100%;
+
+        max-width:370px;
+
+    }
+
+    .card img{
+
+        height:230px;
+
+    }
+
+}
+
+/* Celulares pequeños */
+
+@media (max-width:480px){
+
+    .productos{
+
+        padding:60px 15px;
+
+    }
+
+    .titulo h2{
+
+        font-size:24px;
+
+    }
+
+    .titulo p{
+
+        font-size:14px;
+
+    }
+
+    .card{
+
+        max-width:100%;
+
+    }
+
+    .card-body{
+
+        padding:18px;
+
+    }
+
+    .card img{
+
+        height:200px;
+
+    }
+
+    .cart-sidebar{
+
+        width:100%;
+
+    }
+
+}

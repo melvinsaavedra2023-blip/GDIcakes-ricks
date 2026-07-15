@@ -1,0 +1,311 @@
+.pedidos{
+
+    width:90%;
+
+    max-width:1100px;
+
+    margin:140px auto 50px;
+
+}
+
+.pedidos h1{
+
+    font-size:38px;
+
+    margin-bottom:35px;
+
+    color:#222;
+
+}
+
+#listaPedidos{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:22px;
+
+}
+
+.pedido-card{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:25px;
+
+    box-shadow:0 10px 35px rgba(0,0,0,.08);
+
+    transition:.25s;
+
+}
+
+.pedido-card:hover{
+
+    transform:translateY(-4px);
+
+}
+
+.pedido-top{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:18px;
+
+}
+
+.numero{
+
+    font-size:20px;
+
+    font-weight:700;
+
+}
+
+.fecha{
+
+    color:#777;
+
+}
+
+.info{
+
+    display:grid;
+
+    grid-template-columns:repeat(3,1fr);
+
+    gap:20px;
+
+    margin:20px 0;
+
+}
+
+.info div{
+
+    background:#fafafa;
+
+    padding:18px;
+
+    border-radius:12px;
+
+}
+
+.info span{
+
+    display:block;
+
+    color:#777;
+
+    margin-bottom:8px;
+
+    font-size:14px;
+
+}
+
+.info strong{
+
+    font-size:17px;
+
+}
+
+.estado{
+
+    padding:8px 15px;
+
+    border-radius:30px;
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:700;
+
+    display:inline-block;
+
+}
+
+.pendiente{
+
+    background:#f39c12;
+
+}
+
+.preparacion{
+
+    background:#3498db;
+
+}
+
+.entregado{
+
+    background:#27ae60;
+
+}
+
+.cancelado{
+
+    background:#e74c3c;
+
+}
+
+.btn-detalle{
+
+    margin-top:15px;
+
+    border:none;
+
+    background:#d18c38;
+
+    color:white;
+
+    padding:12px 22px;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-weight:600;
+
+    transition:.25s;
+
+}
+
+.btn-detalle:hover{
+
+    background:#b97827;
+
+}
+
+/*=========================
+RESPONSIVE
+=========================*/
+
+@media(max-width:768px){
+
+    .pedidos{
+
+        width:94%;
+
+        margin:120px auto 40px;
+
+    }
+
+    .pedidos h1{
+
+        font-size:30px;
+
+        text-align:center;
+
+        margin-bottom:25px;
+
+    }
+
+    .pedido-card{
+
+        padding:20px;
+
+    }
+
+    .pedido-top{
+
+        flex-direction:column;
+
+        align-items:flex-start;
+
+        gap:12px;
+
+    }
+
+    .numero{
+
+        font-size:18px;
+
+    }
+
+    .info{
+
+        grid-template-columns:1fr;
+
+        gap:15px;
+
+    }
+
+    .info div{
+
+        padding:15px;
+
+    }
+
+    .info strong{
+
+        font-size:16px;
+
+    }
+
+    .btn-detalle{
+
+        width:100%;
+
+        padding:14px;
+
+        margin-top:20px;
+
+    }
+
+}
+
+@media(max-width:480px){
+
+    .pedidos{
+
+        margin:110px auto 30px;
+
+    }
+
+    .pedidos h1{
+
+        font-size:26px;
+
+    }
+
+    .pedido-card{
+
+        border-radius:18px;
+
+        padding:18px;
+
+    }
+
+    .numero{
+
+        font-size:17px;
+
+    }
+
+    .fecha{
+
+        font-size:13px;
+
+    }
+
+    .estado{
+
+        width:100%;
+
+        text-align:center;
+
+    }
+
+    .btn-detalle{
+
+        font-size:14px;
+
+    }
+
+}

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mis Pedidos | Cakes Rick's</title>
+
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/mis-pedidos.css">
+
+<link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+
+        CAKES
+        <span>RICK'S</span>
+
+    </div>
+
+    <button id="menuToggle" class="menu-toggle">
+
+        <i class="ri-menu-line"></i>
+
+    </button>
+
+    <nav id="menu">
+
+        <a href="index.html">Inicio</a>
+
+        <a href="index.html#catalogo">Productos</a>
+
+        <a href="nosotros.html">Nosotros</a>
+
+        <a href="contacto.html">Contacto</a>
+
+    </nav>
+
+    <div class="right">
+
+        <div class="search">
+
+            <i class="ri-search-line"></i>
+
+            <input
+                type="text"
+                placeholder="Buscar pastel...">
+
+        </div>
+
+        <button id="cartButton" class="cart-button">
+
+            <i class="ri-shopping-bag-3-line"></i>
+
+            <span id="cart-count">0</span>
+
+        </button>
+
+        <div id="perfil"></div>
+
+    </div>
+
+</header>
+
+<section class="pedidos">
+
+<h1>Mis Pedidos</h1>
+
+<div id="listaPedidos">
+
+</div>
+
+</section>
+
+<div id="overlay" class="overlay"></div>
+
+<aside id="cartSidebar" class="cart-sidebar">
+
+<div class="cart-header">
+
+<h2>Mi carrito</h2>
+
+<button id="closeCart">
+
+<i class="ri-close-line"></i>
+
+</button>
+
+</div>
+
+<div id="cartItems"></div>
+
+<div class="cart-footer">
+
+<div class="cart-total">
+
+<span>Total</span>
+
+<strong id="cartTotal">
+
+S/.0.00
+
+</strong>
+
+</div>
+
+<button class="checkout">
+
+Finalizar compra
+
+</button>
+
+</div>
+
+</aside>
+
+<script src="assets/js/cart.js"></script>
+<script src="assets/js/session.js"></script>
+<script src="assets/js/mis-pedidos.js"></script>
+<script src="assets/js/menu.js"></script>
+</body>
+
+</html>
