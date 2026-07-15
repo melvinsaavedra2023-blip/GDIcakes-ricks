@@ -9,7 +9,7 @@ let listaProductos = [];
 
 async function cargarProductos(){
 
-    const respuesta = await fetch("http://localhost:3000/api/productos");
+    const respuesta = await fetch("https://gdicakes-ricks.onrender.com/api/productos");
 
     listaProductos = await respuesta.json();
 
@@ -48,7 +48,7 @@ function mostrarProductos(productos){
         <div class="card">
 
             <img
-            src="http://localhost:3000/uploads/${producto.imagen}"
+            src="https://gdicakes-ricks.onrender.com/uploads/${producto.imagen}"
             onerror="this.src='assets/images/cake.png'">
 
             <div class="card-body">

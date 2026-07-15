@@ -2,7 +2,7 @@ async function handleCredentialResponse(response) {
 
     try {
 
-        const respuesta = await fetch("http://localhost:3000/api/google", {
+        const respuesta = await fetch("https://gdicakes-ricks.onrender.com/api/google", {
 
             method: "POST",
 

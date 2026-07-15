@@ -36,7 +36,7 @@ formulario.addEventListener("submit", async function (e) {
 
     try {
 
-        const respuesta = await fetch("http://localhost:3000/api/registro", {
+        const respuesta = await fetch("https://gdicakes-ricks.onrender.com/api/registro", {
 
             method: "POST",
 

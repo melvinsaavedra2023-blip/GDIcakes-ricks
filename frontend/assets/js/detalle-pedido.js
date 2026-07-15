@@ -11,10 +11,8 @@ async function cargarDetalle() {
         //=========================
 
         const respuestaInfo = await fetch(
-
-            `http://localhost:3000/api/pedidos/info/${idPedido}`
-
-        );
+    `https://gdicakes-ricks.onrender.com/api/pedidos/info/${idPedido}`
+);
 
         const datosInfo = await respuestaInfo.json();
 
@@ -57,10 +55,8 @@ async function cargarDetalle() {
         //=========================
 
         const respuesta = await fetch(
-
-            `http://localhost:3000/api/pedidos/${idPedido}`
-
-        );
+    `https://gdicakes-ricks.onrender.com/api/pedidos/${idPedido}`
+);
 
         const productos = await respuesta.json();
 
@@ -85,7 +81,7 @@ async function cargarDetalle() {
                 <div class="producto-detalle">
 
                     <img
-                        src="http://localhost:3000/uploads/${producto.imagen}"
+                        src="https://gdicakes-ricks.onrender.com/uploads/${producto.imagen}"
                         onerror="this.src='assets/images/cake.png'">
 
                     <div class="producto-info">

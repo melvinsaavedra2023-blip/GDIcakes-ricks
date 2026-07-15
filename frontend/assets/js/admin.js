@@ -13,7 +13,7 @@ async function cargarDashboard() {
     try {
 
         const respuestaDashboard = await fetch(
-            "http://localhost:3000/api/admin/dashboard"
+            "https://gdicakes-ricks.onrender.com/api/admin/dashboard"
         );
 
         const datos = await respuestaDashboard.json();
@@ -28,7 +28,7 @@ async function cargarDashboard() {
             datos.clientes || 0;
 
         const respuestaProductos = await fetch(
-            "http://localhost:3000/api/productos"
+            "https://gdicakes-ricks.onrender.com/api/productos"
         );
 
         const productos = await respuestaProductos.json();
@@ -57,7 +57,7 @@ async function mostrarProductos() {
     try {
 
         const respuesta = await fetch(
-            "http://localhost:3000/api/productos"
+            "https://gdicakes-ricks.onrender.com/api/productos"
         );
 
         const productos = await respuesta.json();
@@ -115,7 +115,7 @@ async function mostrarProductos() {
         productos.forEach(producto => {
 
             const imagen = producto.imagen
-                ? `http://localhost:3000/uploads/${producto.imagen}`
+                ? `https://gdicakes-ricks.onrender.com/uploads/${producto.imagen}`
                 : "assets/images/cake.png";
 
             html += `
@@ -203,7 +203,7 @@ async function eliminar(id) {
     try {
 
         const respuesta = await fetch(
-            `http://localhost:3000/api/productos/${id}`,
+            `https://gdicakes-ricks.onrender.com/api/productos/${id}`,
             {
                 method: "DELETE"
             }
@@ -351,7 +351,7 @@ async function guardarProducto(e) {
     try {
 
         const respuesta = await fetch(
-            "http://localhost:3000/api/productos",
+            "https://gdicakes-ricks.onrender.com/api/productos",
             {
                 method: "POST",
                 body: datos
@@ -394,7 +394,7 @@ async function editarProducto(id) {
     try {
 
         const respuesta = await fetch(
-            "http://localhost:3000/api/productos"
+            "https://gdicakes-ricks.onrender.com/api/productos"
         );
 
         const productos = await respuesta.json();
@@ -420,7 +420,7 @@ async function editarProducto(id) {
         }
 
         const imagen = producto.imagen
-            ? `http://localhost:3000/uploads/${producto.imagen}`
+            ? `https://gdicakes-ricks.onrender.com/uploads/${producto.imagen}`
             : "assets/images/cake.png";
 
         contenido.innerHTML = `
@@ -552,7 +552,7 @@ async function actualizarProducto(e, id) {
 
         const respuesta = await fetch(
 
-            `http://localhost:3000/api/productos/${id}`,
+            `https://gdicakes-ricks.onrender.com/api/productos/${id}`,
 
             {
 
@@ -591,7 +591,6 @@ async function actualizarProducto(e, id) {
 }
 
 window.actualizarProducto = actualizarProducto;
-
 //=========================
 // PEDIDOS
 //=========================
@@ -603,7 +602,7 @@ async function mostrarPedidos() {
     try {
 
         const respuesta = await fetch(
-            "http://localhost:3000/api/pedidos"
+            "https://gdicakes-ricks.onrender.com/api/pedidos"
         );
 
         const pedidos = await respuesta.json();
@@ -737,7 +736,6 @@ async function mostrarPedidos() {
     }
 
 }
-
 //=========================
 // VER DETALLE PEDIDO
 //=========================
@@ -747,7 +745,7 @@ async function verDetalle(id) {
     try {
 
         const respuesta = await fetch(
-            `http://localhost:3000/api/pedidos/${id}`
+            `https://gdicakes-ricks.onrender.com/api/pedidos/${id}`
         );
 
         const productos = await respuesta.json();
@@ -789,7 +787,7 @@ async function verDetalle(id) {
         productos.forEach(producto => {
 
             const imagen = producto.imagen
-                ? `http://localhost:3000/uploads/${producto.imagen}`
+                ? `https://gdicakes-ricks.onrender.com/uploads/${producto.imagen}`
                 : "assets/images/cake.png";
 
             html += `
@@ -855,7 +853,7 @@ async function guardarEstado(id) {
 
         const respuesta = await fetch(
 
-            `http://localhost:3000/api/pedidos/${id}`,
+            `https://gdicakes-ricks.onrender.com/api/pedidos/${id}`,
 
             {
 
@@ -904,6 +902,7 @@ async function guardarEstado(id) {
 }
 
 window.guardarEstado = guardarEstado;
+
 //=========================
 // CLIENTES
 //=========================
@@ -915,7 +914,7 @@ async function mostrarClientes() {
     try {
 
         const respuesta = await fetch(
-            "http://localhost:3000/api/clientes"
+            "https://gdicakes-ricks.onrender.com/api/clientes"
         );
 
         const clientes = await respuesta.json();

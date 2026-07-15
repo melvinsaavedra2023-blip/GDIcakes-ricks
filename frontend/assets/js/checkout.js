@@ -27,7 +27,7 @@ if (resumen) {
         <div class="producto-resumen">
 
             <img
-                src="http://localhost:3000/uploads/${producto.imagen}"
+                src="https://gdicakes-ricks.onrender.com/uploads/${producto.imagen}"
                 alt="${producto.nombre}"
                 onerror="this.src='assets/images/cake.png'">
 
@@ -101,7 +101,7 @@ formulario.addEventListener("submit", async (e) => {
 
         console.log("🚀 Enviando pedido...");
 
-        const respuesta = await fetch("http://localhost:3000/api/pedidos", {
+        const respuesta = await fetch("https://gdicakes-ricks.onrender.com/api/pedidos", {
 
             method: "POST",
 
