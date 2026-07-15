@@ -171,11 +171,17 @@ const editarProducto = async (req, res) => {
 
         }
 
-        // Conservar la imagen anterior si no se sube una nueva
+        //=========================
+        // CONSERVAR IMAGEN
+        //=========================
 
-        const imagen = req.file
-            ? req.file.filename
-            : productoActual.rows[0].imagen;
+        let imagen = productoActual.rows[0].imagen;
+
+        if (req.file && req.file.filename) {
+
+            imagen = req.file.filename;
+
+        }
 
         await db.query(
 
