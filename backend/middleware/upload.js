@@ -1,7 +1,5 @@
 const multer = require("multer");
-
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-
 const cloudinary = require("../config/cloudinary");
 
 //=========================
@@ -12,19 +10,18 @@ const storage = new CloudinaryStorage({
 
     cloudinary,
 
-    params: {
+    params: async (req, file) => {
 
-        folder: "cakes-ricks",
+        return {
+            folder: "cakes-ricks",
 
-        allowed_formats: [
+            resource_type: "image",
 
-            "jpg",
-            "jpeg",
-            "png",
-            "webp"
+            allowed_formats: ["jpg", "jpeg", "png", "webp"],
 
-        ]
-
+            // 🔥 NOMBRE ÚNICO (EVITA SOBREESCRIBIR)
+            public_id: Date.now() + "-" + file.originalname
+        };
     }
 
 });
@@ -36,25 +33,25 @@ const storage = new CloudinaryStorage({
 const fileFilter = (req, file, cb) => {
 
     if (file.mimetype.startsWith("image/")) {
-
         cb(null, true);
-
     } else {
-
-        cb(new Error("Solo se permiten imágenes."), false);
-
+        cb(new Error("Solo se permiten imágenes"), false);
     }
 
 };
 
 //=========================
-// MULTER
+// MULTER CONFIG
 //=========================
 
 const upload = multer({
 
     storage,
-    fileFilter
+    fileFilter,
+
+    limits: {
+        fileSize: 5 * 1024 * 1024 // 🔥 5MB límite
+    }
 
 });
 

@@ -9,39 +9,25 @@ const cerrarSesion = document.getElementById("cerrarSesion");
 //=========================
 
 async function cargarDashboard() {
-
     try {
-
-        const respuestaDashboard = await fetch(
-            "https://gdicakes-ricks.onrender.com/api/admin/dashboard"
-        );
-
-        const datos = await respuestaDashboard.json();
+        const res = await fetch("https://gdicakes-ricks.onrender.com/api/admin/dashboard");
+        const datos = await res.json();
 
         document.getElementById("totalVentas").textContent =
             "S/. " + Number(datos.ventas || 0).toFixed(2);
 
-        document.getElementById("totalPedidos").textContent =
-            datos.pedidos || 0;
+        document.getElementById("totalPedidos").textContent = datos.pedidos || 0;
+        document.getElementById("totalUsuarios").textContent = datos.clientes || 0;
 
-        document.getElementById("totalUsuarios").textContent =
-            datos.clientes || 0;
-
-        const respuestaProductos = await fetch(
-            "https://gdicakes-ricks.onrender.com/api/productos"
-        );
-
-        const productos = await respuestaProductos.json();
+        const resProd = await fetch("https://gdicakes-ricks.onrender.com/api/productos");
+        const productos = await resProd.json();
 
         document.getElementById("totalProductos").textContent =
             Array.isArray(productos) ? productos.length : 0;
 
-    } catch (error) {
-
-        console.error("Error Dashboard:", error);
-
+    } catch (err) {
+        console.error("Dashboard error:", err);
     }
-
 }
 
 cargarDashboard();
@@ -53,188 +39,152 @@ cargarDashboard();
 menuProductos.addEventListener("click", mostrarProductos);
 
 async function mostrarProductos() {
-
     try {
-
-        const respuesta = await fetch(
-            "https://gdicakes-ricks.onrender.com/api/productos"
-        );
-
-        const productos = await respuesta.json();
-
-        if (!Array.isArray(productos)) {
-
-            contenido.innerHTML = `
-                <h2>Error al cargar los productos</h2>
-                <p>${productos.mensaje || "No se pudieron obtener los productos."}</p>
-            `;
-
-            return;
-
-        }
+        const res = await fetch("https://gdicakes-ricks.onrender.com/api/productos");
+        const productos = await res.json();
 
         let html = `
-
         <h2>Productos</h2>
-
-        <br>
-
-        <button
-            class="btn btn-editar"
-            onclick="nuevoProducto()">
-
-            <i class="ri-add-line"></i>
-
-            Nuevo Producto
-
-        </button>
-
-        <br><br>
-
+        <button onclick="nuevoProducto()">Nuevo</button>
         <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>ID</th>
-                    <th>Imagen</th>
-                    <th>Nombre</th>
-                    <th>Precio</th>
-                    <th>Stock</th>
-                    <th>Acciones</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
+        <thead>
+        <tr>
+        <th>ID</th><th>Imagen</th><th>Nombre</th><th>Precio</th><th>Stock</th><th>Acciones</th>
+        </tr>
+        </thead><tbody>
         `;
 
-        productos.forEach(producto => {
+        productos.forEach(p => {
+            const img = p.imagen && p.imagen.startsWith("http")
+                ? p.imagen
+                : "assets/images/cake.png";
 
-            const imagen = producto.imagen
-    ? producto.imagen
-    : "assets/images/cake.png";
             html += `
-
             <tr>
-
-                <td>${producto.id_producto}</td>
-
+                <td>${p.id_producto}</td>
+                <td><img src="${img}" width="70" onerror="this.src='assets/images/cake.png'"></td>
+                <td>${p.nombre}</td>
+                <td>${p.precio}</td>
+                <td>${p.stock}</td>
                 <td>
-
-                    <img
-                        src="${imagen}"
-                        width="70"
-                        height="70"
-                        style="object-fit:cover;border-radius:10px"
-                        onerror="this.src='assets/images/cake.png'">
-
+                    <button onclick="editarProducto(${p.id_producto})">✏️</button>
+                    <button onclick="eliminar(${p.id_producto})">🗑️</button>
                 </td>
-
-                <td>${producto.nombre}</td>
-
-                <td>S/. ${Number(producto.precio).toFixed(2)}</td>
-
-                <td>${producto.stock}</td>
-
-                <td>
-
-                    <button
-                        class="btn btn-editar"
-                        onclick="editarProducto(${producto.id_producto})">
-
-                        <i class="ri-edit-line"></i>
-
-                    </button>
-
-                    <button
-                        class="btn btn-eliminar"
-                        onclick="eliminar(${producto.id_producto})">
-
-                        <i class="ri-delete-bin-6-line"></i>
-
-                    </button>
-
-                </td>
-
             </tr>
-
             `;
-
         });
 
-        html += `
-
-            </tbody>
-
-        </table>
-
-        `;
-
+        html += "</tbody></table>";
         contenido.innerHTML = html;
 
-    } catch (error) {
-
-        console.error(error);
-
-        contenido.innerHTML = `
-            <h2>Error</h2>
-            <p>No se pudieron cargar los productos.</p>
-        `;
-
+    } catch (err) {
+        console.error(err);
     }
-
 }
 
 //=========================
-// ELIMINAR PRODUCTO
+// NUEVO PRODUCTO
+//=========================
+
+function nuevoProducto() {
+    contenido.innerHTML = `
+    <h2>Nuevo Producto</h2>
+    <form id="formNuevo">
+        <input name="nombre" placeholder="Nombre"><br>
+        <input name="precio" placeholder="Precio"><br>
+        <input name="stock" placeholder="Stock"><br>
+        <input type="file" name="imagen"><br>
+        <button type="submit">Guardar</button>
+    </form>
+    `;
+
+    document.getElementById("formNuevo").addEventListener("submit", guardarProducto);
+}
+
+async function guardarProducto(e) {
+    e.preventDefault();
+
+    const form = document.getElementById("formNuevo");
+    const data = new FormData(form);
+
+    console.log("ENVIANDO:", data.get("imagen"));
+
+    const res = await fetch("https://gdicakes-ricks.onrender.com/api/productos", {
+        method: "POST",
+        body: data
+    });
+
+    const result = await res.json();
+    console.log(result);
+
+    alert("Producto creado");
+    mostrarProductos();
+}
+
+//=========================
+// EDITAR PRODUCTO
+//=========================
+
+async function editarProducto(id) {
+    const res = await fetch(`https://gdicakes-ricks.onrender.com/api/productos`);
+    const productos = await res.json();
+
+    const p = productos.find(x => x.id_producto == id);
+
+    contenido.innerHTML = `
+    <h2>Editar</h2>
+    <form id="formEditar">
+        <input name="nombre" value="${p.nombre}"><br>
+        <input name="precio" value="${p.precio}"><br>
+        <input name="stock" value="${p.stock}"><br>
+        <input type="file" name="imagen"><br>
+        <button type="submit">Actualizar</button>
+    </form>
+    `;
+
+    document.getElementById("formEditar")
+        .addEventListener("submit", (e) => actualizarProducto(e, id));
+}
+
+async function actualizarProducto(e, id) {
+    e.preventDefault();
+
+    const form = document.getElementById("formEditar");
+    const data = new FormData(form);
+
+    console.log("ENVIANDO IMAGEN:", data.get("imagen"));
+
+    const res = await fetch(
+        `https://gdicakes-ricks.onrender.com/api/productos/${id}`,
+        {
+            method: "PUT",
+            body: data
+        }
+    );
+
+    const result = await res.json();
+    console.log(result);
+
+    alert("Producto actualizado");
+    mostrarProductos();
+}
+
+//=========================
+// ELIMINAR
 //=========================
 
 async function eliminar(id) {
+    await fetch(`https://gdicakes-ricks.onrender.com/api/productos/${id}`, {
+        method: "DELETE"
+    });
 
-    const confirmar = confirm("¿Desea eliminar este producto?");
-
-    if (!confirmar) return;
-
-    try {
-
-        const respuesta = await fetch(
-            `https://gdicakes-ricks.onrender.com/api/productos/${id}`,
-            {
-                method: "DELETE"
-            }
-        );
-
-        const datos = await respuesta.json();
-
-        if (datos.success) {
-
-            alert("Producto eliminado correctamente.");
-
-            await mostrarProductos();
-
-            await cargarDashboard();
-
-        } else {
-
-            alert(datos.mensaje || "No se pudo eliminar el producto.");
-
-        }
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert("Error del servidor.");
-
-    }
-
+    alert("Eliminado");
+    mostrarProductos();
 }
 
+window.editarProducto = editarProducto;
 window.eliminar = eliminar;
+window.nuevoProducto = nuevoProducto;
 
 //=========================
 // NUEVO PRODUCTO
@@ -248,92 +198,51 @@ function nuevoProducto() {
 
         <br>
 
-        <form id="formProducto" enctype="multipart/form-data">
+        <form id="formProducto">
 
-            <input
-                type="text"
-                name="nombre"
-                placeholder="Nombre del producto"
-                required>
-
+            <input type="text" name="nombre" placeholder="Nombre del producto" required>
             <br><br>
 
-            <textarea
-                name="descripcion"
-                placeholder="Descripción"
-                required></textarea>
-
+            <textarea name="descripcion" placeholder="Descripción" required></textarea>
             <br><br>
 
-            <input
-                type="number"
-                step="0.01"
-                name="precio"
-                placeholder="Precio"
-                required>
-
+            <input type="number" step="0.01" name="precio" placeholder="Precio" required>
             <br><br>
 
-            <input
-                type="number"
-                name="stock"
-                placeholder="Stock"
-                required>
-
+            <input type="number" name="stock" placeholder="Stock" required>
             <br><br>
 
-            <input
-                type="file"
-                name="imagen"
-                accept="image/*"
-                required>
-
+            <input type="file" name="imagen" accept="image/*" required>
             <br><br>
 
-            <select
-                name="id_categoria"
-                required>
-
-                <option value="" selected disabled>Seleccione una categoría</option>
+            <select name="id_categoria" required>
+                <option value="" disabled selected>Seleccione categoría</option>
                 <option value="1">Tortas</option>
                 <option value="2">Cupcakes</option>
                 <option value="3">Postres</option>
                 <option value="4">Bebidas</option>
-
             </select>
 
             <br><br>
 
-            <button
-                type="submit"
-                class="btn btn-editar">
-
-                <i class="ri-save-line"></i>
-
+            <button type="submit" class="btn btn-editar">
                 Guardar Producto
-
             </button>
 
-            <button
-                type="button"
-                class="btn"
-                onclick="mostrarProductos()">
-
+            <button type="button" class="btn" onclick="mostrarProductos()">
                 Cancelar
-
             </button>
 
         </form>
-
     `;
 
     document
         .getElementById("formProducto")
         .addEventListener("submit", guardarProducto);
-
 }
 
 window.nuevoProducto = nuevoProducto;
+
 
 //=========================
 // GUARDAR PRODUCTO
@@ -343,13 +252,14 @@ async function guardarProducto(e) {
 
     e.preventDefault();
 
-    const formulario = document.getElementById("formProducto");
+    const form = document.getElementById("formProducto");
+    const datos = new FormData(form);
 
-    const datos = new FormData(formulario);
+    console.log("IMAGEN ENVIADA:", datos.get("imagen"));
 
     try {
 
-        const respuesta = await fetch(
+        const res = await fetch(
             "https://gdicakes-ricks.onrender.com/api/productos",
             {
                 method: "POST",
@@ -357,33 +267,26 @@ async function guardarProducto(e) {
             }
         );
 
-        const resultado = await respuesta.json();
+        const result = await res.json();
+        console.log("RESPUESTA:", result);
 
-        if (respuesta.ok && resultado.success) {
-
+        if (res.ok) {
             alert("Producto registrado correctamente.");
-
-            await mostrarProductos();
-
-            await cargarDashboard();
-
+            mostrarProductos();
+            cargarDashboard();
         } else {
-
-            alert(resultado.mensaje || "No se pudo registrar el producto.");
-
+            alert(result.mensaje || "Error al registrar producto");
         }
 
     } catch (error) {
-
         console.error(error);
-
-        alert("Error del servidor.");
-
+        alert("Error del servidor");
     }
-
 }
 
 window.guardarProducto = guardarProducto;
+
+
 //=========================
 // EDITAR PRODUCTO
 //=========================
@@ -392,35 +295,22 @@ async function editarProducto(id) {
 
     try {
 
-        const respuesta = await fetch(
+        const res = await fetch(
             "https://gdicakes-ricks.onrender.com/api/productos"
         );
 
-        const productos = await respuesta.json();
+        const productos = await res.json();
 
-        if (!Array.isArray(productos)) {
-
-            alert("No se pudieron obtener los productos.");
-
-            return;
-
-        }
-
-        const producto = productos.find(
-            p => p.id_producto == id
-        );
+        const producto = productos.find(p => p.id_producto == id);
 
         if (!producto) {
-
-            alert("Producto no encontrado.");
-
+            alert("Producto no encontrado");
             return;
-
         }
 
-        const imagen = producto.imagen
-    ? producto.imagen
-    : "assets/images/cake.png";
+        const imagen = producto.imagen && producto.imagen.startsWith("http")
+            ? producto.imagen
+            : "assets/images/cake.png";
 
         contenido.innerHTML = `
 
@@ -428,113 +318,106 @@ async function editarProducto(id) {
 
         <br>
 
-        <form id="formEditar" enctype="multipart/form-data">
+        <form id="formEditar">
 
-            <input
-                type="text"
-                name="nombre"
-                value="${producto.nombre}"
-                required>
-
+            <input type="text" name="nombre" value="${producto.nombre}" required>
             <br><br>
 
-            <textarea
-                name="descripcion"
-                required>${producto.descripcion}</textarea>
-
+            <textarea name="descripcion" required>${producto.descripcion}</textarea>
             <br><br>
 
-            <input
-                type="number"
-                step="0.01"
-                name="precio"
-                value="${producto.precio}"
-                required>
-
+            <input type="number" step="0.01" name="precio" value="${producto.precio}" required>
             <br><br>
 
-            <input
-                type="number"
-                name="stock"
-                value="${producto.stock}"
-                required>
-
+            <input type="number" name="stock" value="${producto.stock}" required>
             <br><br>
 
             <label><b>Imagen actual</b></label>
-
             <br><br>
 
-            <img
-                src="${imagen}"
-                width="120"
-                height="120"
+            <img src="${imagen}" width="120"
                 style="object-fit:cover;border-radius:10px"
                 onerror="this.src='assets/images/cake.png'">
 
             <br><br>
 
-            <input
-                type="file"
-                name="imagen"
-                accept="image/*">
-
+            <input type="file" name="imagen" accept="image/*">
             <br><br>
 
-            <select
-                name="id_categoria"
-                required>
-
+            <select name="id_categoria" required>
                 <option value="1" ${producto.id_categoria == 1 ? "selected" : ""}>Tortas</option>
                 <option value="2" ${producto.id_categoria == 2 ? "selected" : ""}>Cupcakes</option>
                 <option value="3" ${producto.id_categoria == 3 ? "selected" : ""}>Postres</option>
                 <option value="4" ${producto.id_categoria == 4 ? "selected" : ""}>Bebidas</option>
-
             </select>
 
             <br><br>
 
-            <button
-                type="submit"
-                class="btn btn-editar">
-
-                <i class="ri-save-line"></i>
-
+            <button type="submit" class="btn btn-editar">
                 Actualizar Producto
-
             </button>
 
-            <button
-                type="button"
-                class="btn"
-                onclick="mostrarProductos()">
-
+            <button type="button" class="btn" onclick="mostrarProductos()">
                 Cancelar
-
             </button>
 
         </form>
-
         `;
 
         document
             .getElementById("formEditar")
-            .addEventListener(
-                "submit",
-                (e) => actualizarProducto(e, id)
-            );
+            .addEventListener("submit", (e) => actualizarProducto(e, id));
 
     } catch (error) {
-
         console.error(error);
-
-        alert("Error al cargar el producto.");
-
+        alert("Error al cargar producto");
     }
-
 }
 
 window.editarProducto = editarProducto;
+
+
+//=========================
+// ACTUALIZAR PRODUCTO
+//=========================
+
+async function actualizarProducto(e, id) {
+
+    e.preventDefault();
+
+    const form = document.getElementById("formEditar");
+    const datos = new FormData(form);
+
+    console.log("IMAGEN UPDATE:", datos.get("imagen"));
+
+    try {
+
+        const res = await fetch(
+            `https://gdicakes-ricks.onrender.com/api/productos/${id}`,
+            {
+                method: "PUT",
+                body: datos
+            }
+        );
+
+        const result = await res.json();
+        console.log("RESPUESTA UPDATE:", result);
+
+        if (res.ok) {
+            alert("Producto actualizado");
+            mostrarProductos();
+            cargarDashboard();
+        } else {
+            alert(result.mensaje || "Error al actualizar");
+        }
+
+    } catch (error) {
+        console.error(error);
+        alert("Error del servidor");
+    }
+}
+
+window.actualizarProducto = actualizarProducto;
 //=========================
 // ACTUALIZAR PRODUCTO
 //=========================

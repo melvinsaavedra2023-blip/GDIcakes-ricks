@@ -5,12 +5,11 @@ const { getConnection } = require("../config/db");
 //=========================
 
 const obtenerProductos = async (req, res) => {
-
     try {
 
         const db = await getConnection();
 
-        const resultado = await db.query(`
+        const result = await db.query(`
             SELECT
                 id_producto,
                 nombre,
@@ -25,27 +24,23 @@ const obtenerProductos = async (req, res) => {
             ORDER BY id_producto DESC
         `);
 
-        res.json(resultado.rows);
+        res.json(result.rows);
 
     } catch (error) {
-
         console.error(error);
-
         res.status(500).json({
             success: false,
-            mensaje: error.message
+            mensaje: "Error al obtener productos"
         });
-
     }
-
 };
+
 
 //=========================
 // AGREGAR PRODUCTO
 //=========================
 
 const agregarProducto = async (req, res) => {
-
     try {
 
         const {
@@ -56,15 +51,19 @@ const agregarProducto = async (req, res) => {
             id_categoria
         } = req.body;
 
-        // 🔥 CORREGIDO
-        const imagen = req.file
-            ? req.file.filename
-            : "cake.png";
+        // 🔥 IMPORTANTE (Cloudinary o local)
+        let imagen = "assets/images/cake.png";
+
+        if (req.file) {
+            console.log("IMAGEN RECIBIDA:", req.file);
+
+            // Si usas Cloudinary
+            imagen = req.file.path || req.file.filename;
+        }
 
         const db = await getConnection();
 
-        await db.query(
-            `
+        await db.query(`
             INSERT INTO productos
             (
                 nombre,
@@ -75,45 +74,36 @@ const agregarProducto = async (req, res) => {
                 estado,
                 id_categoria
             )
-            VALUES
-            (
-                $1,$2,$3,$4,$5,true,$6
-            )
-            `,
-            [
-                nombre,
-                descripcion,
-                precio,
-                stock,
-                imagen,
-                id_categoria
-            ]
-        );
+            VALUES ($1,$2,$3,$4,$5,true,$6)
+        `, [
+            nombre,
+            descripcion,
+            precio,
+            stock,
+            imagen,
+            id_categoria
+        ]);
 
         res.json({
             success: true,
-            mensaje: "Producto registrado correctamente."
+            mensaje: "Producto creado correctamente"
         });
 
     } catch (error) {
-
         console.error(error);
-
         res.status(500).json({
             success: false,
-            mensaje: error.message
+            mensaje: "Error al crear producto"
         });
-
     }
-
 };
+
 
 //=========================
 // EDITAR PRODUCTO
 //=========================
 
 const editarProducto = async (req, res) => {
-
     try {
 
         const { id } = req.params;
@@ -128,36 +118,29 @@ const editarProducto = async (req, res) => {
 
         const db = await getConnection();
 
-        // Obtener imagen actual
-        const productoActual = await db.query(
-            `
+        // Obtener producto actual
+        const actual = await db.query(`
             SELECT imagen
             FROM productos
             WHERE id_producto = $1
-            `,
-            [id]
-        );
+        `, [id]);
 
-        if (productoActual.rows.length === 0) {
+        if (actual.rows.length === 0) {
             return res.status(404).json({
                 success: false,
-                mensaje: "Producto no encontrado."
+                mensaje: "Producto no encontrado"
             });
         }
 
-        // 🔥 CONSERVAR IMAGEN
-        let imagen = productoActual.rows[0].imagen;
+        let imagen = actual.rows[0].imagen;
 
-        // 🔥 SOLO CAMBIAR SI HAY NUEVA
+        // 🔥 SOLO CAMBIA SI HAY NUEVA IMAGEN
         if (req.file) {
-            console.log("NUEVA IMAGEN:", req.file.filename);
-            imagen = req.file.filename;
-        } else {
-            console.log("SIN NUEVA IMAGEN");
+            console.log("NUEVA IMAGEN:", req.file);
+            imagen = req.file.path || req.file.filename;
         }
 
-        await db.query(
-            `
+        await db.query(`
             UPDATE productos
             SET
                 nombre = $1,
@@ -167,86 +150,72 @@ const editarProducto = async (req, res) => {
                 imagen = $5,
                 id_categoria = $6
             WHERE id_producto = $7
-            `,
-            [
-                nombre,
-                descripcion,
-                precio,
-                stock,
-                imagen,
-                id_categoria,
-                id
-            ]
-        );
+        `, [
+            nombre,
+            descripcion,
+            precio,
+            stock,
+            imagen,
+            id_categoria,
+            id
+        ]);
 
         res.json({
             success: true,
-            mensaje: "Producto actualizado correctamente."
+            mensaje: "Producto actualizado correctamente"
         });
 
     } catch (error) {
-
         console.error(error);
-
         res.status(500).json({
             success: false,
-            mensaje: error.message
+            mensaje: "Error al actualizar producto"
         });
-
     }
-
 };
+
 
 //=========================
 // ELIMINAR PRODUCTO
 //=========================
 
 const eliminarProducto = async (req, res) => {
-
     try {
 
         const { id } = req.params;
 
         const db = await getConnection();
 
-        await db.query(
-            `
+        await db.query(`
             DELETE FROM productos
             WHERE id_producto = $1
-            `,
-            [id]
-        );
+        `, [id]);
 
         res.json({
             success: true,
-            mensaje: "Producto eliminado correctamente."
+            mensaje: "Producto eliminado"
         });
 
     } catch (error) {
-
         console.error(error);
-
         res.status(500).json({
             success: false,
-            mensaje: error.message
+            mensaje: "Error al eliminar producto"
         });
-
     }
-
 };
+
 
 //=========================
 // OBTENER PEDIDOS
 //=========================
 
 const obtenerPedidos = async (req, res) => {
-
     try {
 
         const db = await getConnection();
 
-        const resultado = await db.query(`
-
+        const result = await db.query(`
             SELECT
                 p.id_pedido,
                 c.nombre || ' ' || c.apellido AS cliente,
@@ -257,38 +226,31 @@ const obtenerPedidos = async (req, res) => {
                 p.total,
                 p.estado,
                 p.metodo_pago
-
             FROM pedidos p
-
             INNER JOIN clientes c
-            ON p.id_cliente = c.id_cliente
-
+                ON p.id_cliente = c.id_cliente
             ORDER BY
-            CASE p.estado
-                WHEN 'Pendiente' THEN 1
-                WHEN 'Preparando' THEN 2
-                WHEN 'Enviado' THEN 3
-                WHEN 'Entregado' THEN 4
-                ELSE 5
-            END,
-            p.id_pedido DESC
-
+                CASE p.estado
+                    WHEN 'Pendiente' THEN 1
+                    WHEN 'Preparando' THEN 2
+                    WHEN 'Enviado' THEN 3
+                    WHEN 'Entregado' THEN 4
+                    ELSE 5
+                END,
+                p.id_pedido DESC
         `);
 
-        res.json(resultado.rows);
+        res.json(result.rows);
 
     } catch (error) {
-
         console.error(error);
-
         res.status(500).json({
             success: false,
-            mensaje: error.message
+            mensaje: "Error al obtener pedidos"
         });
-
     }
-
 };
+
 
 module.exports = {
     obtenerProductos,
