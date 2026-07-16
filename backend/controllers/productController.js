@@ -185,11 +185,11 @@ const eliminarProducto = async (req, res) => {
         const { id } = req.params;
 
         const db = await getConnection();
-
-        await db.query(`
-            DELETE FROM productos
-            WHERE id_producto = $1
-        `, [id]);
+await db.query(`
+    UPDATE productos
+    SET estado = false
+    WHERE id_producto = $1
+`, [id]);
 
         res.json({
             success: true,
