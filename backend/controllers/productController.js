@@ -3,7 +3,6 @@ const { getConnection } = require("../config/db");
 //=========================
 // OBTENER PRODUCTOS
 //=========================
-
 const obtenerProductos = async (req, res) => {
     try {
 
@@ -27,7 +26,7 @@ const obtenerProductos = async (req, res) => {
         res.json(result.rows);
 
     } catch (error) {
-        console.error(error);
+        console.error("ERROR OBTENER PRODUCTOS:", error);
         res.status(500).json({
             success: false,
             mensaje: "Error al obtener productos"
@@ -39,7 +38,6 @@ const obtenerProductos = async (req, res) => {
 //=========================
 // AGREGAR PRODUCTO
 //=========================
-
 const agregarProducto = async (req, res) => {
     try {
 
@@ -51,14 +49,10 @@ const agregarProducto = async (req, res) => {
             id_categoria
         } = req.body;
 
-        // 🔥 IMPORTANTE (Cloudinary o local)
         let imagen = "assets/images/cake.png";
 
-        if (req.file) {
-            console.log("IMAGEN RECIBIDA:", req.file);
-
-            // Si usas Cloudinary
-            imagen = req.file.path || req.file.filename;
+        if (req.file && req.file.path) {
+            imagen = req.file.path;
         }
 
         const db = await getConnection();
@@ -90,7 +84,7 @@ const agregarProducto = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("ERROR AGREGAR PRODUCTO:", error);
         res.status(500).json({
             success: false,
             mensaje: "Error al crear producto"
@@ -102,7 +96,6 @@ const agregarProducto = async (req, res) => {
 //=========================
 // EDITAR PRODUCTO
 //=========================
-
 const editarProducto = async (req, res) => {
     try {
 
@@ -118,7 +111,6 @@ const editarProducto = async (req, res) => {
 
         const db = await getConnection();
 
-        // Obtener producto actual
         const actual = await db.query(`
             SELECT imagen
             FROM productos
@@ -134,10 +126,14 @@ const editarProducto = async (req, res) => {
 
         let imagen = actual.rows[0].imagen;
 
-        // 🔥 SOLO CAMBIA SI HAY NUEVA IMAGEN
-        if (req.file) {
-            console.log("NUEVA IMAGEN:", req.file);
-            imagen = req.file.path || req.file.filename;
+        // 🔥 ARREGLA IMÁGENES ANTIGUAS (FRAPPÉ)
+        if (!imagen || !imagen.startsWith("http")) {
+            imagen = "assets/images/cake.png";
+        }
+
+        // 🔥 SOLO SI SUBE NUEVA
+        if (req.file && req.file.path) {
+            imagen = req.file.path;
         }
 
         await db.query(`
@@ -166,7 +162,7 @@ const editarProducto = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("ERROR EDITAR PRODUCTO:", error);
         res.status(500).json({
             success: false,
             mensaje: "Error al actualizar producto"
@@ -176,28 +172,28 @@ const editarProducto = async (req, res) => {
 
 
 //=========================
-// ELIMINAR PRODUCTO
+// ELIMINAR PRODUCTO (SOFT DELETE)
 //=========================
-
 const eliminarProducto = async (req, res) => {
     try {
 
         const { id } = req.params;
 
         const db = await getConnection();
-await db.query(`
-    UPDATE productos
-    SET estado = false
-    WHERE id_producto = $1
-`, [id]);
+
+        await db.query(`
+            UPDATE productos
+            SET estado = false
+            WHERE id_producto = $1
+        `, [id]);
 
         res.json({
             success: true,
-            mensaje: "Producto eliminado"
+            mensaje: "Producto eliminado correctamente"
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("ERROR ELIMINAR PRODUCTO:", error);
         res.status(500).json({
             success: false,
             mensaje: "Error al eliminar producto"
@@ -209,7 +205,6 @@ await db.query(`
 //=========================
 // OBTENER PEDIDOS
 //=========================
-
 const obtenerPedidos = async (req, res) => {
     try {
 
@@ -243,7 +238,7 @@ const obtenerPedidos = async (req, res) => {
         res.json(result.rows);
 
     } catch (error) {
-        console.error(error);
+        console.error("ERROR PEDIDOS:", error);
         res.status(500).json({
             success: false,
             mensaje: "Error al obtener pedidos"
