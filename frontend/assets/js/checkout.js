@@ -27,9 +27,9 @@ if (resumen) {
         <div class="producto-resumen">
 
             <img
-                src="https://gdicakes-ricks.onrender.com/uploads/${producto.imagen}"
-                alt="${producto.nombre}"
-                onerror="this.src='assets/images/cake.png'">
+    src="${producto.imagen}"
+    alt="${producto.nombre}"
+    onerror="this.src='assets/images/cake.png'">
 
             <div class="producto-info">
 

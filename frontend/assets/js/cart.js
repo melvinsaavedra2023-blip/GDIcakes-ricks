@@ -86,9 +86,9 @@ function renderCarrito() {
         <div class="cart-product">
 
             <img
-src="https://gdicakes-ricks.onrender.com/uploads/${p.imagen}"
-alt="${p.nombre}"
-onerror="this.src='assets/images/cake.png'">
+  src="${p.imagen}"
+  alt="${p.nombre}"
+  onerror="this.src='assets/images/cake.png'">
 
             <div class="cart-info">
 

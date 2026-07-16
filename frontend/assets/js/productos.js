@@ -48,9 +48,8 @@ function mostrarProductos(productos){
         <div class="card">
 
             <img
-            src="https://gdicakes-ricks.onrender.com/uploads/${producto.imagen}"
-            onerror="this.src='assets/images/cake.png'">
-
+    src="${producto.imagen}"
+    onerror="this.src='assets/images/cake.png'">
             <div class="card-body">
 
                 <h3>${producto.nombre}</h3>

@@ -115,9 +115,8 @@ async function mostrarProductos() {
         productos.forEach(producto => {
 
             const imagen = producto.imagen
-                ? `https://gdicakes-ricks.onrender.com/uploads/${producto.imagen}`
-                : "assets/images/cake.png";
-
+    ? producto.imagen
+    : "assets/images/cake.png";
             html += `
 
             <tr>
@@ -420,8 +419,8 @@ async function editarProducto(id) {
         }
 
         const imagen = producto.imagen
-            ? `https://gdicakes-ricks.onrender.com/uploads/${producto.imagen}`
-            : "assets/images/cake.png";
+    ? producto.imagen
+    : "assets/images/cake.png";
 
         contenido.innerHTML = `
 
@@ -546,22 +545,33 @@ async function actualizarProducto(e, id) {
 
     const formulario = document.getElementById("formEditar");
 
-    const datos = new FormData(formulario);
+    const datos = new FormData();
+
+    // Campos normales
+    datos.append("nombre", formulario.nombre.value);
+    datos.append("descripcion", formulario.descripcion.value);
+    datos.append("precio", formulario.precio.value);
+    datos.append("stock", formulario.stock.value);
+    datos.append("id_categoria", formulario.id_categoria.value);
+
+    // 🔥 ARCHIVO (ESTO ES LO IMPORTANTE)
+    const fileInput = formulario.imagen;
+
+    if (fileInput.files.length > 0) {
+        datos.append("imagen", fileInput.files[0]);
+        console.log("ENVIANDO IMAGEN:", fileInput.files[0]);
+    } else {
+        console.log("NO SE SELECCIONÓ IMAGEN");
+    }
 
     try {
 
         const respuesta = await fetch(
-
             `https://gdicakes-ricks.onrender.com/api/productos/${id}`,
-
             {
-
                 method: "PUT",
-
                 body: datos
-
             }
-
         );
 
         const resultado = await respuesta.json();
@@ -571,7 +581,6 @@ async function actualizarProducto(e, id) {
             alert("Producto actualizado correctamente.");
 
             await mostrarProductos();
-
             await cargarDashboard();
 
         } else {
@@ -583,7 +592,6 @@ async function actualizarProducto(e, id) {
     } catch (error) {
 
         console.error(error);
-
         alert("Error del servidor.");
 
     }
@@ -787,7 +795,7 @@ async function verDetalle(id) {
         productos.forEach(producto => {
 
             const imagen = producto.imagen
-                ? `https://gdicakes-ricks.onrender.com/uploads/${producto.imagen}`
+                ? producto.imagen
                 : "assets/images/cake.png";
 
             html += `

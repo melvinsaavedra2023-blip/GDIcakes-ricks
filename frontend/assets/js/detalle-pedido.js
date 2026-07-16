@@ -81,8 +81,8 @@ async function cargarDetalle() {
                 <div class="producto-detalle">
 
                     <img
-                        src="https://gdicakes-ricks.onrender.com/uploads/${producto.imagen}"
-                        onerror="this.src='assets/images/cake.png'">
+    src="${producto.imagen}"
+    onerror="this.src='assets/images/cake.png'">
 
                     <div class="producto-info">
 
